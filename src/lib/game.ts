@@ -158,8 +158,6 @@ const fetchPlayers = async () => {
 };
 
 export const analyseTeam = async (players) => {
-  console.log("analyse team")
-  return;
   const chat = await fetchPlayers();
   if (!chat) {
     return;

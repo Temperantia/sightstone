@@ -1,59 +1,46 @@
 <script lang="ts">
-  import { analyseTeam } from "$lib/game";
-
   import { leagueRequest } from "$lib/requests";
-  import champions from "$lib/champion.json";
 
-  import { myTeamStore, sessionStore, statusStore } from "$lib/stores";
+  import {
+    myTeamStore,
+    sessionStore,
+    statusStore,
+    urlParamsStore,
+  } from "$lib/stores";
+  import { page } from "$app/stores";
 
-  let poller;
+  const getChampions = async () => {
+    if (!$myTeamStore) {
+      return;
+    }
 
-  async function waitUntil(condition) {
-    return new Promise<any>((resolve) => {
-      const interval = setInterval(async () => {
-        const session = await leagueRequest("/lol-champ-select/v1/session");
-        console.log("session");
-        if (session) {
-          sessionStore.set(session);
-          statusStore.set("NEW GAME");
-          resolve(session);
-          clearInterval(interval);
-        }
-      }, 1000);
+    const session = await leagueRequest("/lol-champ-select/v1/session");
+    if (!session) {
+      return;
+    }
+    myTeamStore.update(($myTeam) => {
+      for (const { summonerId, championId } of session.myTeam) {
+        $myTeam[summonerId] = { ...$myTeam[summonerId], championId };
+      }
+      return $myTeam;
     });
-  }
-
-  const init = async () => {
-
-    const session = await waitUntil("");
-
-   console.log("waited");
-    const t = await analyseTeam(session.myTeam);
-    console.log("finish")
-
-    console.log("team", Object.values(t)) 
-   // myTeamStore.set(Object.values(t));
-   // myTeamStore.set([{name: "ok"}]);
   };
 
-/*   myTeamStore.subscribe((value) => {
-    console.log("valu", value);
-    t = value;
-  }); */
+  const init = async () => {
+    urlParamsStore.set({
+      port: $page.url.searchParams.get("port"),
+      password: $page.url.searchParams.get("password"),
+    });
 
-  $: init();
+    setInterval(async () => {
+      const session = await leagueRequest("/lol-champ-select/v1/session");
+      sessionStore.set(session);
+    }, 1000);
+
+    setInterval(getChampions, 1000);
+  };
+
+  init();
 </script>
 
-{#each $myTeamStore as team}
-  {team.name}
-  {team.assignedPosition}
-  {#if team.championId}
-    <img
-      src={"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
-        champions[team.championId].name +
-        "_0.jpg"}
-      alt="osef"
-    />
-  {/if}
-{/each}
 <slot />

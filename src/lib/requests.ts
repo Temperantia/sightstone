@@ -1,5 +1,8 @@
 import axios from "axios";
-const apiKey = "RGAPI-5506f662-0694-40ca-b6c1-3eeb0ce81fcc";
+import { get } from "svelte/store";
+import { urlParamsStore } from "./stores";
+
+const apiKey = "RGAPI-e65c6afb-bdf9-4b1b-b312-ffcad085210f";
 
 export const riotRequest = async (url: string) => {
   try {
@@ -15,13 +18,12 @@ export const riotRequest = async (url: string) => {
   }
 };
 
-
 export const leagueRequest = async (url: string) => {
-  console.log(process.argv)
+  const { port, password } = get(urlParamsStore);
   try {
-    const response = await axios.get(`https://127.0.0.1:${process.argv[-2]}${url}`, {
+    const response = await axios.get(`https://127.0.0.1:${port}${url}`, {
       headers: {
-        Authorization: `Basic ${Buffer.from(`riot:${process.argv[-1]}`).toString(
+        Authorization: `Basic ${Buffer.from(`riot:${password}`).toString(
           "base64"
         )}`,
       },

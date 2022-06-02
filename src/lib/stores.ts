@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import { analyseTeam } from "./game";
 import { leagueRequest } from "./requests";
 
@@ -17,11 +17,14 @@ async function waitUntil(condition) {
   });
 }
 
-export const myTeamStore = writable([]); /* asyncable<any>(async () => {
-  console.log("k");
-  const session = await waitUntil("");
-  const te = await analyseTeam(session.myTeam);
-  return Object.values(te);
-}); */
 export const sessionStore = writable(null);
+sessionStore.subscribe(async ($session) => {
+  if (!$session || get(myTeamStore)) {
+    return;
+  }
+  console.log($session.gameId);
+  myTeamStore.set(await analyseTeam($session.myTeam));
+});
+export const myTeamStore = writable(null);
 export const statusStore = writable(null);
+export const urlParamsStore = writable<any>({});
