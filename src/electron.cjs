@@ -24,9 +24,9 @@ async function createMainWindow() {
 
   mainwindow = new BrowserWindow({
     /*     x: mws.x,
-    y: mws.y,
-    width: mws.width,
-    height: mws.height, */
+    y: mws.y, */
+    width: 1200,
+    height: 800,
 
     webPreferences: {
       webSecurity: false,

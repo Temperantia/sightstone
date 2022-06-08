@@ -2,7 +2,7 @@ import axios from "axios";
 import { get } from "svelte/store";
 import { urlParamsStore } from "./stores";
 
-const apiKey = "RGAPI-e65c6afb-bdf9-4b1b-b312-ffcad085210f";
+const apiKey = "RGAPI-864c6953-b0ff-4536-9ea7-a6e1f02ce004";
 
 export const riotRequest = async (url: string) => {
   try {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "virtual:windi.css";
   import { leagueRequest } from "$lib/requests";
 
   import {
@@ -8,6 +9,7 @@
     urlParamsStore,
   } from "$lib/stores";
   import { page } from "$app/stores";
+  import { analyseTeam } from "$lib/game";
 
   const getChampions = async () => {
     if (!$myTeamStore) {
@@ -39,6 +41,15 @@
 
     setInterval(getChampions, 1000);
   };
+
+  sessionStore.subscribe(async ($session) => {
+    if (!$session || $myTeamStore) {
+      return;
+    }
+    myTeamStore.set({});
+    myTeamStore.set(await analyseTeam($session.myTeam));
+    console.log($myTeamStore);
+  });
 
   init();
 </script>

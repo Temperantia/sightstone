@@ -2,6 +2,14 @@ import { get } from "svelte/store";
 import { riotRequest, leagueRequest } from "./requests";
 import { myTeamStore, statusStore } from "./stores";
 
+export const positions = {
+  top: "Top",
+  jungle: "Jungle",
+  middle: "Mid",
+  bottom: "Bot",
+  utility: "Support",
+};
+
 const isPosition = (position: string, positions: string[]) => {
   return positions.reduce((sum, p) => (p === position ? sum + 1 : sum), 0) >= 8;
 };
@@ -73,9 +81,7 @@ const streak = (gameWins) => {
     }
   }
 
-  return winStreak > loseStreak
-    ? winStreak + "+ streak"
-    : loseStreak + "- streak";
+  return winStreak > loseStreak ? winStreak : loseStreak * -1;
 
   console.info(
     winStreak > loseStreak ? winStreak + "+ streak" : loseStreak + "- streak"
@@ -96,7 +102,7 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
   }
   const { puuid } = player;
   const matchIds = await riotRequest(
-    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&queue=420&type=ranked`
+    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&queue=420&type=ranked`
   );
   if (!matchIds) {
     console.error("couldnt find the matches for " + name);
@@ -157,6 +163,12 @@ const fetchPlayers = async () => {
   return champSelectConv;
 };
 
+const countPoints = (player) => {
+  let points = 0;
+
+  return points;
+};
+
 export const analyseTeam = async (players) => {
   const chat = await fetchPlayers();
   if (!chat) {
@@ -169,7 +181,7 @@ export const analyseTeam = async (players) => {
     }
   }
 
-  console.log(team)
+  console.log(team);
 
   for (const { summonerId, championId, assignedPosition } of players) {
     if (summonerId) {
@@ -178,15 +190,17 @@ export const analyseTeam = async (players) => {
   }
   const values: any = Object.entries(team);
   for (const [id, player] of values) {
-    team[id] = { ...team[id], ...(await analysePlayer(player)) };
-    console.log(team[id])
+    const analysis = await analysePlayer(player);
+    const points = countPoints(analysis);
+    team[id] = { ...team[id], ...analysis, points };
+    console.log(team[id]);
   }
 
   console.log(team);
 
   console.info("Waiting for everyone to lock picks...");
 
- /*  while (get(statusStore) === "NEW GAME") {
+  /*  while (get(statusStore) === "NEW GAME") {
     const session = await leagueRequest("/lol-champ-select/v1/session");
     if (!session) {
       break;

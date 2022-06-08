@@ -16,15 +16,9 @@ async function waitUntil(condition) {
     }, 1000);
   });
 }
+export const myTeamStore = writable(null);
 
 export const sessionStore = writable(null);
-sessionStore.subscribe(async ($session) => {
-  if (!$session || get(myTeamStore)) {
-    return;
-  }
-  console.log($session.gameId);
-  myTeamStore.set(await analyseTeam($session.myTeam));
-});
-export const myTeamStore = writable(null);
+
 export const statusStore = writable(null);
 export const urlParamsStore = writable<any>({});
