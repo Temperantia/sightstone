@@ -1,8 +1,9 @@
 <script>
-  import { myTeamStore } from "$lib/stores";
+  import { keyStore, myTeamStore } from "$lib/stores";
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
   import { derived } from "svelte/store";
+  import { browser } from "$app/env";
 
   let playersMock = {
     "27750808": {
@@ -186,11 +187,21 @@
         )
       : []
   );
+  $: console.log("store", players);
 </script>
 
 <div class="bg-gray-400 h-screen">
+  <input
+    value={$keyStore}
+    on:blur={(event) => {
+      if (browser) {
+        localStorage.setItem("key", event.target.value);
+      }
+      keyStore.set(event.target.value);
+    }}
+  />
   <div class="flex space-x-5 mx-5">
-    {#each players as player}
+    {#each $players as player}
       <Player {player} />
     {/each}
   </div>

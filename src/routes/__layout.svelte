@@ -3,13 +3,16 @@
   import { leagueRequest } from "$lib/requests";
 
   import {
+    argStore,
+    keyStore,
     myTeamStore,
     sessionStore,
     statusStore,
-    urlParamsStore,
   } from "$lib/stores";
-  import { page } from "$app/stores";
   import { analyseTeam } from "$lib/game";
+  import { browser } from "$app/env";
+
+  let loading = false;
 
   const getChampions = async () => {
     if (!$myTeamStore) {
@@ -29,10 +32,15 @@
   };
 
   const init = async () => {
-    urlParamsStore.set({
-      port: $page.url.searchParams.get("port"),
-      password: $page.url.searchParams.get("password"),
-    });
+    if (browser) {
+      keyStore.set(localStorage.getItem("key") ?? null);
+    }
+
+    setInterval(() => {
+      if (browser) {
+        argStore.set((window as any).args);
+      }
+    }, 1000);
 
     setInterval(async () => {
       const session = await leagueRequest("/lol-champ-select/v1/session");
@@ -43,10 +51,11 @@
   };
 
   sessionStore.subscribe(async ($session) => {
-    if (!$session || $myTeamStore) {
+    if (loading || !$session || $myTeamStore) {
       return;
     }
-    myTeamStore.set({});
+    //myTeamStore.set({});
+    loading = true;
     myTeamStore.set(await analyseTeam($session.myTeam));
     console.log($myTeamStore);
   });

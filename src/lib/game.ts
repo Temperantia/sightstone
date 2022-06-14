@@ -1,6 +1,4 @@
-import { get } from "svelte/store";
 import { riotRequest, leagueRequest } from "./requests";
-import { myTeamStore, statusStore } from "./stores";
 
 export const positions = {
   top: "Top",
@@ -117,6 +115,7 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
       `https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}`
     );
     if (!game) {
+      console.error("skipping a game");
       continue;
     }
     const {
@@ -141,13 +140,10 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
     kdas.push(kda);
   }
 
-  console.info(assignedPosition);
-
   const smurf = isSmurf(kdas);
   const offrole = isOffrole(assignedPosition, gamePositions);
   const onStreak = streak(gameWins);
 
-  // team comp ap ad tank early late
   return { champions, smurf, offrole, onStreak };
 };
 
@@ -191,40 +187,12 @@ export const analyseTeam = async (players) => {
   const values: any = Object.entries(team);
   for (const [id, player] of values) {
     const analysis = await analysePlayer(player);
+    console.log("finished analysis");
     const points = countPoints(analysis);
     team[id] = { ...team[id], ...analysis, points };
-    console.log(team[id]);
   }
 
   console.log(team);
-
-  console.info("Waiting for everyone to lock picks...");
-
-  /*  while (get(statusStore) === "NEW GAME") {
-    const session = await leagueRequest("/lol-champ-select/v1/session");
-    if (!session) {
-      break;
-    }
-
-    if (session.timer.phase === "FINALIZATION") {
-      for (const {
-        championId,
-        summonerId,
-        assignedPosition,
-      } of session.myTeam) {
-        console.info(assignedPosition);
-        const champion = championPerformance(
-          team[summonerId].champions?.[championId]
-        );
-        team[summonerId].champion = champion;
-        console.info("");
-      }
-      myTeamStore.set(team);
-      statusStore.set("FINALIZATION");
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  } */
 
   return team;
 };

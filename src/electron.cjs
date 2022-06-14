@@ -1,38 +1,45 @@
-const { app, nativeTheme, BrowserWindow } = require("electron");
+const { app, ipcMain, BrowserWindow } = require("electron");
 const serve = require("electron-serve");
-const fs = require("fs");
 const ws = require("electron-window-state");
+const fs = require("fs");
 try {
   require("electron-reloader")(module);
 } catch {}
 
-const loadURL = serve({ directory: "." });
-const PORT = process.env.PORT || 3000;
-const isdev = !app.isPackaged || process.env.NODE_ENV == "development";
-let mainwindow;
 const pathToLockfile =
   process.platform === "win32"
     ? "C:/Riot Games/League of Legends/lockfile"
     : "/Applications/League of Legends.app/Contents/LoL/lockfile";
+const loadURL = serve({ directory: "." });
+const port = process.env.PORT || 3000;
+const isdev = !app.isPackaged || process.env.NODE_ENV == "development";
+let mainwindow;
 
-async function createMainWindow() {
-  nativeTheme.themeSource = "light";
-  /*   let mws = ws({
+function loadVite(port) {
+  mainwindow.loadURL(`http://127.0.0.1:${port}`).catch((err) => {
+    setTimeout(() => {
+      loadVite(port);
+    }, 200);
+  });
+}
+
+function createMainWindow() {
+  let mws = ws({
     defaultWidth: 1000,
     defaultHeight: 800,
-  }); */
+  });
 
   mainwindow = new BrowserWindow({
-    /*     x: mws.x,
-    y: mws.y, */
-    width: 1200,
-    height: 800,
+    x: mws.x,
+    y: mws.y,
+    width: mws.width,
+    height: mws.height,
 
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: isdev,
+      devTools: true,
     },
   });
 
@@ -43,21 +50,10 @@ async function createMainWindow() {
   if (!isdev) mainwindow.removeMenu();
   else mainwindow.webContents.openDevTools();
 
-  /*   mws.manage(mainwindow);
-   */
+  mws.manage(mainwindow);
 
-  let lockfile;
-  if (fs.existsSync(pathToLockfile)) {
-    lockfile = fs.readFileSync(pathToLockfile).toString();
-  }
-  const [_name, _username, port, password] = lockfile?.split(":") ?? [];
-
-  if (isdev) {
-    mainwindow.loadURL(
-      `http://127.0.0.1:${PORT}?port=${port}&password=${password}`
-    );
-  } else await mainwindow.loadURL(`app://-?port=${port}&password=${password}`);
-  //else loadURL(mainwindow);
+  if (isdev) loadVite(port);
+  else loadURL(mainwindow);
 }
 
 app.once("ready", createMainWindow);
@@ -77,3 +73,13 @@ app.on(
     callback(true);
   }
 );
+
+ipcMain.on("variable-request", function (event, arg) {
+  let lockfile;
+  if (fs.existsSync(pathToLockfile)) {
+    lockfile = fs.readFileSync(pathToLockfile).toString();
+  }
+  const [_name, _username, port, password] = lockfile?.split(":") ?? [];
+
+  event.sender.send("variable-reply", [port, password]);
+});
