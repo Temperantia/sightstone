@@ -16,8 +16,7 @@
     "twitch": "node --loader ts-node/esm twitch.ts"
   },
   "devDependencies": {
-    "@sveltejs/adapter-node": "next",
-    "@sveltejs/adapter-static": "next",
+    "@sveltejs/adapter-cloudflare": "^1.0.0-next.24",
     "@sveltejs/kit": "next",
     "@types/cron": "^2.0.0",
     "@types/lodash": "^4.14.182",
