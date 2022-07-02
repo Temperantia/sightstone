@@ -13,12 +13,14 @@
     "build": "svelte-kit build",
     "dev:package": "npm run build && electron-builder --config electron-builder.config.json --dir",
     "package": "npm run build && electron-builder --config electron-builder.config.json",
-    "twitch": "node --loader ts-node/esm osef.ts"
+    "twitch": "node --loader ts-node/esm twitch.ts"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "next",
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
+    "@types/cron": "^2.0.0",
+    "@types/lodash": "^4.14.182",
     "@types/tmi.js": "^1.8.1",
     "concurrently": "^7.2.1",
     "electron": "^12.0.2",
@@ -34,11 +36,18 @@
   "dependencies": {
     "axios": "^0.27.2",
     "case": "^1.6.3",
+    "cheerio": "^1.0.0-rc.11",
+    "cron": "^2.0.0",
     "electron-serve": "^1.1.0",
     "electron-window-state": "^5.0.3",
+    "firebase": "^9.8.4",
+    "firebase-admin": "^10.3.0",
     "firefox": "^0.0.1",
+    "lodash": "^4.17.21",
     "puppeteer": "^14.3.0",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
-    "tmi.js": "^1.8.5"
+    "queue-promise": "^2.2.1",
+    "tmi.js": "^1.8.5",
+    "typescript": "^4.7.4"
   }
 }

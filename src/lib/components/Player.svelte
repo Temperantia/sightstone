@@ -1,6 +1,8 @@
 <script lang="ts">
   import championData from "$lib/champion.json";
   import { positions } from "$lib/game";
+  import { accountsStore } from "$lib/stores";
+  import _ from "lodash";
 
   export let player: any;
   const {
@@ -14,23 +16,37 @@
     points,
   } = player;
 
-  console.log(player);
-
   const findChampionName = (championId: number) => {
     return Object.values(championData.data).find(
       ({ key }) => key === championId.toString()
     )?.id;
   };
+
+  const stream = _.findKey($accountsStore, (account) =>
+    _.find(account.accounts, (account) => {
+      return account
+        .replace("%20", "")
+        .includes(encodeURI(name.toLowerCase()).replace("%20", ""));
+    })
+  );
 </script>
 
 <div class="w-min-40">
   <div
-    class="bg-blue-900 text-white flex justify-center text-center items-center p-1"
+    class="{stream
+      ? 'bg-purple-900 cursor-pointer'
+      : 'bg-blue-300'} text-white flex justify-center text-center items-center p-1"
+    on:click={() => {
+      if (!stream) {
+        return;
+      }
+      window.open("https://twitch.tv/" + stream, "_blank");
+    }}
   >
     {name}
   </div>
   <div class="flex flex-col items-center bg-gray-300">
-    <div class="flex justify-center items-center h-min-20 w-full">
+    <div class="flex items-center justify-center w-full h-min-20">
       {#if championId}
         <img
           class="m-2"
@@ -40,7 +56,7 @@
             ".png"}
           alt="osef"
         />
-        {#if champions?.[championId]}
+        <!--  {#if champions?.[championId]}
           <div>
             <div>{champions[championId].wins.length >= 10 ? "OTP" : ""}</div>
             <div>
@@ -59,14 +75,14 @@
           </div>
         {:else}
           <div>FIRST TIME</div>
-        {/if}
+        {/if} -->
       {/if}
     </div>
     <img
       class="w-16 h-16 my-3"
       src="/ranked-positions/Position_{offrole
         ? 'Bronze'
-        : 'Challenger'}-{positions[assignedPosition]}.png"
+        : 'Challenger'}-{positions[assignedPosition.toLowerCase()]}.png"
       alt=""
     />
     <div class="h-min-20">
@@ -78,7 +94,7 @@
     </div>
   </div>
   {#if points}
-    <div class="bg-gray-100 text-center p-2">
+    <div class="p-2 text-center bg-gray-100">
       {points} Dodge points, yikes!
     </div>
   {/if}

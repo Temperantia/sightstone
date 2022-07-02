@@ -1,11 +1,11 @@
 <script>
-  import { keyStore, myTeamStore } from "$lib/stores";
+  import { regionStore, searchStore } from "$lib/stores";
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
-  import { derived } from "svelte/store";
-  import { browser } from "$app/env";
+  import axios from "axios";
+  import _ from "lodash";
 
-  let playersMock = {
+  const playersMock = {
     "27750808": {
       name: "Milk Cheikh",
       championId: 121,
@@ -179,19 +179,52 @@
   };
 
   const keys = Object.keys(positions);
-  const players = derived($myTeamStore, ($myTeam) =>
-    $myTeam
-      ? Object.values($myTeam).sort(
-          (a, b) =>
-            keys.indexOf(a.assignedPosition) - keys.indexOf(b.assignedPosition)
-        )
-      : []
-  );
-  $: console.log("store", players);
+  let teams = [];
 </script>
 
-<div class="bg-gray-400 h-screen">
-  <input
+<div class="h-screen bg-gray-400">
+  <div class="flex justify-center py-10 space-x-3">
+    <input bind:value={$searchStore} />
+    <select bind:value={$regionStore}>
+      <option value="kr">kr</option>
+      <option value="euw">euw</option>
+      <option value="na">na</option>
+    </select>
+    <button
+      on:click={async () => {
+        try {
+          const result = await axios.get(
+            `game?name=${$searchStore}&region=${$regionStore}`
+          );
+          console.log(result);
+          const team = result.data.participants.map(
+            ({ position, summoner, team_key, champion_id }) => ({
+              assignedPosition: position ?? "",
+              name: summoner.name,
+              teamKey: team_key,
+              championId: champion_id,
+            })
+          );
+          teams = _.values(
+            _.groupBy(
+              _.values(team).sort(
+                (a, b) =>
+                  keys.indexOf(a.assignedPosition?.toLowerCase()) -
+                  keys.indexOf(b.assignedPosition?.toLowerCase())
+              ),
+              "teamKey"
+            )
+          );
+        } catch {
+          teams = [];
+        }
+      }}
+    >
+      Search
+    </button>
+  </div>
+
+  <!-- <input
     value={$keyStore}
     on:blur={(event) => {
       if (browser) {
@@ -199,15 +232,19 @@
       }
       keyStore.set(event.target.value);
     }}
-  />
-  <div class="flex space-x-5 mx-5">
-    {#each $players as player}
-      <Player {player} />
+  /> -->
+  <div class="flex flex-col items-center mx-5 space-y-5">
+    {#each teams as team}
+      <div class="flex space-x-5">
+        {#each team as player}
+          <Player {player} />
+        {/each}
+      </div>
     {/each}
   </div>
 
-  <div class="bg-gray-300 mt-40 flex justify-center items-end w-1/2 mx-auto">
+  <!--  <div class="flex items-end justify-center w-1/2 mx-auto mt-40 bg-gray-300">
     <div class="text-8xl">80</div>
     <h2 class="text-xl">Dodge points</h2>
-  </div>
+  </div>  -->
 </div>

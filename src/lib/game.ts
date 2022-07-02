@@ -3,9 +3,9 @@ import { riotRequest, leagueRequest } from "./requests";
 export const positions = {
   top: "Top",
   jungle: "Jungle",
-  middle: "Mid",
-  bottom: "Bot",
-  utility: "Support",
+  mid: "Mid",
+  adc: "Bot",
+  support: "Support",
 };
 
 const isPosition = (position: string, positions: string[]) => {

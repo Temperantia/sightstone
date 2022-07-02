@@ -3,6 +3,7 @@
   import { leagueRequest } from "$lib/requests";
 
   import {
+    accountsStore,
     argStore,
     keyStore,
     myTeamStore,
@@ -11,6 +12,7 @@
   } from "$lib/stores";
   import { analyseTeam } from "$lib/game";
   import { browser } from "$app/env";
+  import { getAccounts } from "$lib/firebase";
 
   let loading = false;
 
@@ -32,6 +34,8 @@
   };
 
   const init = async () => {
+    const accounts = await getAccounts();
+    accountsStore.set(accounts);
     if (browser) {
       keyStore.set(localStorage.getItem("key") ?? null);
     }
