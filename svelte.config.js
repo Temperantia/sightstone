@@ -6,9 +6,7 @@ const dev = process.env.NODE_ENV == "development";
 
 export default {
   kit: {
-    //adapter: node()
     adapter: adapter(),
-
     prerender: {
       default: true,
     },

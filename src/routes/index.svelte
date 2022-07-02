@@ -2,8 +2,8 @@
   import { regionStore, searchStore } from "$lib/stores";
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
-  import axios from "axios";
   import _ from "lodash";
+  import { game } from "$lib/firebase";
 
   const playersMock = {
     "27750808": {
@@ -193,9 +193,10 @@
     <button
       on:click={async () => {
         try {
-          const result = await axios.get(
-            `game?name=${$searchStore}&region=${$regionStore}`
-          );
+          const result = await game({
+            name: $searchStore,
+            region: $regionStore,
+          });
           console.log(result);
           const team = result.data.participants.map(
             ({ position, summoner, team_key, champion_id }) => ({

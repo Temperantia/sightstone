@@ -1,18 +1,19 @@
+import { https } from "firebase-functions";
 import axios from "axios";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 
 const summonerIdRegex = /"summoner_id":"[a-zA-Z0-9_-]*"/g;
 
-export const ingame = async (name: string, region: string) => {
+export const game = https.onCall(async ({ name, region }) => {
   console.log(name);
-  let url = `https://www.op.gg/summoners/${region}/${encodeURI(name)}`;
+  let url: string = `https://www.op.gg/summoners/${region}/${encodeURI(name)}`;
   let result = await axios.get(url);
   console.log(result.data.length);
   if (!result.data) {
     return;
   }
   const match = result.data.match(summonerIdRegex);
-  if (_.isEmpty(match)) {
+  if (isEmpty(match)) {
     return;
   }
   const id = JSON.parse("{" + match[0] + "}").summoner_id;
@@ -21,5 +22,5 @@ export const ingame = async (name: string, region: string) => {
   url = `https://euw.op.gg/api/spectates/${id}?region=${region}`;
   result = await axios.get(url);
   console.log(result);
-  return result.data;
-};
+  return result.data.data;
+});
