@@ -1,12 +1,9 @@
 import axios from "axios";
 import { readFileSync, writeFileSync } from "fs";
-import tmi from "tmi.js";
-import puppeteer from "puppeteer";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import Queue from "queue-promise";
 import _ from "lodash";
-import { CronJob } from "cron";
 
 import serviceAccount from "./sniper-3485f-firebase-adminsdk-954dc-cc88148958.json" assert { type: "json" };
 
@@ -266,7 +263,7 @@ const parseNightbot = async (channel: string) => {
   }
 };
 
-const sendInChat = (channel: string) => {
+/* const sendInChat = (channel: string) => {
   return new Promise((resolve) => {
     const client = new tmi.client({ identity, channels: [channel] });
     client.on("message", onMessage(channel));
@@ -279,9 +276,9 @@ const sendInChat = (channel: string) => {
       resolve(null);
     }, 8000);
   });
-};
+}; */
 
-const initPage = async () => {
+/* const initPage = async () => {
   const browser = await puppeteer.launch({
     headless: false,
   });
@@ -289,7 +286,7 @@ const initPage = async () => {
   await page.goto("https://twitch.tv");
   //await page.setCookie(...arr);
   return page;
-};
+}; */
 
 const main = async () => {
   // await initPage();
@@ -299,14 +296,14 @@ const main = async () => {
 
   findInfo(await getStreams());
 
-  new CronJob(
+  /*   new CronJob(
     "0 0 * * * *",
     async () => {
       findInfo(await getStreams());
     },
     null,
     true
-  );
+  ); */
 };
 
 main();
