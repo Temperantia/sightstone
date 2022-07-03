@@ -75,6 +75,7 @@ const twitchRequest = async (
 };
 
 const getAPIToken = async () => {
+  console.info("fetching api token");
   const {
     data: { access_token },
   } = await axios.post(
