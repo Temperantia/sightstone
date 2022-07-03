@@ -85,6 +85,7 @@ const getAPIToken = async () => {
       "&grant_type=client_credentials"
   );
   APIToken = access_token;
+  console.info("retrived api token");
   return access_token;
 };
 
@@ -291,7 +292,7 @@ const parseNightbot = async (channel: string) => {
 const main = async () => {
   // await initPage();
   //await getToken();
-  await refreshTokens();
+  // await refreshTokens();
   await getAPIToken();
 
   findInfo(await getStreams());
