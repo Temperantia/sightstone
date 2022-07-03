@@ -1,5 +1,5 @@
 <script>
-  import { regionStore, searchStore } from "$lib/stores";
+  import { regionStore, searchStore, accountsStore } from "$lib/stores";
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
   import _ from "lodash";
@@ -198,7 +198,7 @@
             region: $regionStore,
           });
           console.log(result);
-          const team = result.data.participants.map(
+          const team = result.data.data.participants.map(
             ({ position, summoner, team_key, champion_id }) => ({
               assignedPosition: position ?? "",
               name: summoner.name,
@@ -216,7 +216,8 @@
               "teamKey"
             )
           );
-        } catch {
+        } catch (err) {
+          console.log(err);
           teams = [];
         }
       }}
