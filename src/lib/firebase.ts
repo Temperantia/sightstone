@@ -1,6 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
+import {
+  connectFunctionsEmulator,
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBm7vh-MiDZjtkGWR8u-FyejesjwG4It5M",
@@ -13,12 +16,12 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
-const firestore = getFirestore();
 const functions = getFunctions();
-const accountDoc = doc(firestore, "streamers/accounts");
 
-export const getAccounts = async () => {
-  return (await getDoc(accountDoc)).data();
-};
+if (process.env.NODE_ENV !== "production") {
+  connectFunctionsEmulator(functions, "localhost", 5001);
+}
 
+export const streamerNumber = httpsCallable(functions, "streamerNumber");
+export const featured = httpsCallable(functions, "featured");
 export const game = httpsCallable(functions, "game");

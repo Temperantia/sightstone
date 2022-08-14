@@ -7,4 +7,4 @@ export const argStore = writable(null);
 export const keyStore = writable(null);
 export const accountsStore = writable<any>({});
 export const searchStore = writable("");
-export const regionStore = writable("");
+export const regionStore = writable("kr");

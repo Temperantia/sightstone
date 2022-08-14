@@ -2,7 +2,7 @@
   "name": "functions",
   "scripts": {
     "build": "tsc",
-    "serve": "npm run build && firebase emulators:start --only functions",
+    "serve": "concurrently \"tsc --watch\" \"firebase emulators:start --only functions\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
@@ -16,9 +16,11 @@
     "axios": "^0.27.2",
     "firebase-admin": "^9.8.0",
     "firebase-functions": "^3.14.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "queue-promise": "^2.2.1"
   },
   "devDependencies": {
+    "concurrently": "^7.3.0",
     "firebase-functions-test": "^0.2.0",
     "typescript": "^3.8.0"
   },

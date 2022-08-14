@@ -21,8 +21,8 @@ const clientId = "ju8eq7rs6l90rcnvk0lexadm96gghu"; //"ix0r0umc25icbhym8uf2j2j1d6
 const clientSecret = "0tmpbpddq0id3wyx9pxvh6502y0d4k"; // "yowu9eveae5xt5oeias2iu9furoksf";
 const username = "ohwowbunga"; // "snakerequest13"; //"milkcheikh"; //
 
-let page;
-let APIToken;
+//let page;
+let APIToken: string;
 let identity;
 
 /* const cookies = {
@@ -58,11 +58,7 @@ const getToken = async () => {
   return data;
 };
 
-const twitchRequest = async (
-  method: string,
-  endpoint: string,
-  APIToken: string
-) => {
+const twitchRequest = async (method: string, endpoint: string) => {
   const { data } = await axios.request({
     method,
     url: "https://api.twitch.tv/helix" + endpoint,
@@ -108,7 +104,7 @@ const refreshTokens = async () => {
   return data;
 };
 
-const getUserFollows = async (APIToken: string) => {
+/* const getUserFollows = async (APIToken: string) => {
   let follows: any[] = [];
   let cursor;
   do {
@@ -121,7 +117,7 @@ const getUserFollows = async (APIToken: string) => {
     cursor = data.pagination.cursor;
   } while (cursor);
   return follows;
-};
+}; */
 
 const getStreams = async () => {
   let streams: any[] = [];
@@ -129,8 +125,7 @@ const getStreams = async () => {
   do {
     const data = await twitchRequest(
       "GET",
-      "/streams?first=100&game_id=21779" + (cursor ? "&after=" + cursor : ""),
-      APIToken
+      "/streams?first=100&game_id=21779" + (cursor ? "&after=" + cursor : "")
     );
     streams = [...streams, ...data.data];
     cursor = data.pagination.cursor;
@@ -141,7 +136,7 @@ const getStreams = async () => {
   return streams;
 };
 
-const followStream = async (channel: string, page: any) => {
+/* const followStream = async (channel: string, page: any) => {
   await page.goto("https://www.twitch.tv/" + channel);
   await new Promise((resolve) => setTimeout(resolve, 5000));
   const only = await page.$x("//p[text()='Followers-Only Chat']");
@@ -157,7 +152,7 @@ const followStream = async (channel: string, page: any) => {
       }
     }
   }
-};
+}; */
 
 const findInfo = async (streams: any[]) => {
   console.log(streams.length);
@@ -202,18 +197,18 @@ const profileRegex = new RegExp(
 );
 
 const regionRegex = new RegExp(/(?<=https:\/\/)(.*?)(?=.op.gg)/g);
-
+/* 
 const onMessage =
   (channel: string) => async (_target, _context, msg: string) => {
     //console.log(channel, msg);
     const match = msg.match(httpsRegex);
     if (match && msg.includes("commands")) {
-      /*  const accounts = msg.match(regex);
+       const accounts = msg.match(regex);
       console.log(accounts);
       if (!accounts) {
         return;
       }
-      const region = accounts[0].match(regionRegex); */
+      const region = accounts[0].match(regionRegex);
       console.log(match);
       const data = (await accountDoc.get()).data();
       if (!data) {
@@ -223,13 +218,13 @@ const onMessage =
       data[channel] = { commands: match[0] };
       await accountDoc.set(data, { merge: true });
     }
-  };
+  }; */
 
-const onConnected = (channel: string, client) => () => {
+/* const onConnected = (channel: string, client) => () => {
   console.log("connected to https://twitch.tv/" + channel);
   client.say(channel, "!commands");
 };
-
+ */
 const parseStreamElements = async (channel: string) => {
   try {
     let response = await axios.get(

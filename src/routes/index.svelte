@@ -3,7 +3,8 @@
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
   import _ from "lodash";
-  import { game } from "$lib/firebase";
+  import { game, streamerNumber, featured } from "$lib/firebase";
+  import FeaturedGame from "$lib/components/FeaturedGame.svelte";
 
   const playersMock = {
     "27750808": {
@@ -180,62 +181,80 @@
 
   const keys = Object.keys(positions);
   let teams = [];
+
+  const search = async () => {
+    try {
+      const result = await game({
+        name: $searchStore,
+        region: $regionStore,
+      });
+      console.log(result);
+      const team = result.data.data.participants.map(
+        ({ position, summoner, team_key, champion_id }) => ({
+          assignedPosition: position ?? "",
+          name: summoner.name,
+          teamKey: team_key,
+          championId: champion_id,
+        })
+      );
+      teams = _.values(
+        _.groupBy(
+          _.values(team).sort(
+            (a, b) =>
+              keys.indexOf(a.assignedPosition?.toLowerCase()) -
+              keys.indexOf(b.assignedPosition?.toLowerCase())
+          ),
+          "teamKey"
+        )
+      );
+    } catch (err) {
+      console.log(err);
+      teams = [];
+    }
+  };
 </script>
 
-<div class="h-screen bg-gray-400">
-  <div class="flex justify-center py-10 space-x-3">
-    <input bind:value={$searchStore} />
-    <select bind:value={$regionStore}>
-      <option value="kr">kr</option>
-      <option value="euw">euw</option>
-      <option value="na">na</option>
+<div class="px-20 pt-5 pb-20">
+  <div class="flex flex-col items-center py-3 space-y-1">
+    <div class="text-5xl" style="font-family: Righteous">👩🏼‍🎤 Stream Sniper</div>
+    <div class="text-xs font-bold text-red">
+      This version does not work at 100% yet!
+    </div>
+    <div class="text-xs font-bold text-red">
+      You like this website? Why not share it to a friend?
+    </div>
+  </div>
+
+  <div class="text-3xl text-center">Find who is in your game!</div>
+  <div class="flex justify-center py-10">
+    <input
+      placeholder="Search Summoner Name"
+      class="px-6 py-3 text-sm border rounded w-96 border-grey-light-2 bg-grey-light-1 placeholder-grey"
+      bind:value={$searchStore}
+    />
+    <select
+      class="px-6 py-3 text-sm border rounded w-39 border-grey-light-2 bg-grey-light-1"
+      bind:value={$regionStore}
+    >
+      <option value="kr">KR</option>
+      <option value="euw">EUW</option>
+      <option value="na">NA</option>
     </select>
     <button
-      on:click={async () => {
-        try {
-          const result = await game({
-            name: $searchStore,
-            region: $regionStore,
-          });
-          console.log(result);
-          const team = result.data.data.participants.map(
-            ({ position, summoner, team_key, champion_id }) => ({
-              assignedPosition: position ?? "",
-              name: summoner.name,
-              teamKey: team_key,
-              championId: champion_id,
-            })
-          );
-          teams = _.values(
-            _.groupBy(
-              _.values(team).sort(
-                (a, b) =>
-                  keys.indexOf(a.assignedPosition?.toLowerCase()) -
-                  keys.indexOf(b.assignedPosition?.toLowerCase())
-              ),
-              "teamKey"
-            )
-          );
-        } catch (err) {
-          console.log(err);
-          teams = [];
-        }
-      }}
+      class="flex items-center justify-center rounded w-15 h-15 bg-primary"
+      on:click={search}
     >
-      Search
+      <img src="/search.svg" alt="search" width="16" height="16" />
     </button>
   </div>
 
-  <!-- <input
-    value={$keyStore}
-    on:blur={(event) => {
-      if (browser) {
-        localStorage.setItem("key", event.target.value);
-      }
-      keyStore.set(event.target.value);
-    }}
-  /> -->
-  <div class="flex flex-col items-center mx-5 space-y-5">
+  {#await streamerNumber() then { data }}
+    <div class="text-xl font-semibold text-center">
+      Currently: {data} streamers revealed
+    </div>
+  {/await}
+
+  <!--   <div class="flex flex-col items-center mx-5 space-y-5">
     {#each teams as team}
       <div class="flex space-x-5">
         {#each team as player}
@@ -243,10 +262,39 @@
         {/each}
       </div>
     {/each}
+  </div> -->
+
+  <div class="my-10">
+    <div class="text-3xl font-bold">Featured Games</div>
+    {#await featured() then { data }}
+      <div class="flex space-x-5">
+        {#each data as game}
+          <FeaturedGame {game} />
+        {/each}
+      </div>
+    {/await}
   </div>
 
-  <!--  <div class="flex items-end justify-center w-1/2 mx-auto mt-40 bg-gray-300">
-    <div class="text-8xl">80</div>
-    <h2 class="text-xl">Dodge points</h2>
-  </div>  -->
+  <div class="py-8 text-white rounded px-13 bg-blue">
+    <div class="text-2xl font-bold" style="font-family: Montserrat">
+      Buy us a coffee!
+    </div>
+    <div class="text-lg" style="font-family: Montserrat">
+      Help us maintain this project!
+    </div>
+    <div class="text-lg" style="font-family: Montserrat">
+      Contact us at <a
+        class="text-primary"
+        href="mailto: hello.limitlessleagueteam@gmail.com"
+        >hello.limitlessLeagueteam@gmail.com</a
+      >
+    </div>
+  </div>
+</div>
+<div class="px-10 py-16 text-lg text-white bg-black">
+  © 2022 Streamsniper. Streamsniper isn't endorsed by Riot Games and doesn't
+  reflect the views or opinions of Riot Games or anyone officially involved in
+  producing or managing League of Legends. League of Legends and Riot Games are
+  trademarks or registered trademarks of Riot Games, Inc. League of Legends ©
+  Riot Games, Inc.
 </div>

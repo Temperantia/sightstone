@@ -12,7 +12,6 @@
   } from "$lib/stores";
   import { analyseTeam } from "$lib/game";
   import { browser } from "$app/env";
-  import { getAccounts } from "$lib/firebase";
 
   let loading = false;
 
@@ -33,7 +32,7 @@
     });
   };
 
-  const init = async () => {
+  /*   const init = async () => {
     const accounts = await getAccounts();
     accountsStore.set(accounts);
     if (browser) {
@@ -52,7 +51,7 @@
     }, 1000);
 
     setInterval(getChampions, 1000);
-  };
+  }; */
 
   sessionStore.subscribe(async ($session) => {
     if (loading || !$session || $myTeamStore) {
@@ -64,7 +63,14 @@
     console.log($myTeamStore);
   });
 
-  init();
+  /*   init();
+   */
 </script>
 
 <slot />
+
+<style>
+  :global(*) {
+    font-family: "Inter", sans-serif;
+  }
+</style>

@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "name": "Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["run", "serve"],
+      "runtimeExecutable": "npm",
+      "localRoot": "${workspaceFolder}/firebase/functions",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Client",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["dev"],
+      "runtimeExecutable": "yarn",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Browser",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Start",
+      "configurations": ["Client", "Server", "Browser"],
+      "stopAll": true
+    }
+  ]
+}
