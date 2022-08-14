@@ -248,7 +248,9 @@
     </button>
   </div>
 
-  {#await streamerNumber() then { data }}
+  {#await streamerNumber()}
+    Loading ...
+  {:then { data }}
     <div class="text-xl font-semibold text-center">
       Currently: {data} streamers revealed
     </div>
@@ -266,7 +268,9 @@
 
   <div class="my-10">
     <div class="text-3xl font-bold">Featured Games</div>
-    {#await featured() then { data }}
+    {#await featured()}
+      Loading ...
+    {:then { data }}
       <div class="flex space-x-5">
         {#each data as game}
           <FeaturedGame {game} />
