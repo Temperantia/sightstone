@@ -1,10 +1,7 @@
-import { fetchGameByUrl } from "./opgg";
-import { getAPIToken, twitchRequest } from "./twitch";
 import { https } from "firebase-functions";
 import axios from "axios";
 import { isEmpty } from "lodash";
 import { initializeApp } from "firebase-admin";
-import Queue from "queue-promise";
 
 const app = initializeApp();
 const db = app.firestore();
@@ -49,52 +46,4 @@ export const streamerNumber = https.onCall(async () => {
     return 0;
   }
   return Object.keys(streamers).length;
-});
-
-export const featured = https.onCall(async () => {
-  const promise = new Promise(async (resolve) => {
-    const games: any[] = [];
-    const queue = new Queue({ concurrent: 10, interval: 500 });
-
-    const knownStreamers = (
-      await db.collection("streamers").doc("accounts").get()
-    ).data();
-    if (!knownStreamers) {
-      return;
-    }
-
-    await getAPIToken();
-    const { data } = await twitchRequest(
-      "GET",
-      "/streams?first=100&game_id=21779"
-    );
-    let knownCount = 0;
-    for (const stream of data) {
-      const knownStream = knownStreamers[stream.user_login];
-      if (knownStream) {
-        knownCount++;
-        console.log(stream.user_login);
-        for (const account of knownStream.accounts) {
-          queue.enqueue(async () => {
-            const game = await fetchGameByUrl(account, stream.user_login);
-            if (game) {
-              games.push(game);
-              if (games.length >= 3) {
-                queue.stop();
-              }
-            }
-          });
-        }
-        if (knownCount >= 3) {
-          break;
-        }
-      }
-    }
-
-    queue.on("end", () => {
-      resolve(games);
-    });
-  });
-
-  return await promise;
 });

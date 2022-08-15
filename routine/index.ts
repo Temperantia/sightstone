@@ -5,7 +5,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import Queue from "queue-promise";
 import _ from "lodash";
 
-import serviceAccount from "./sniper-3485f-firebase-adminsdk-954dc-cc88148958.json" assert { type: "json" };
+import serviceAccount from "./sniper-3485f-firebase-adminsdk-954dc-cc88148958.json";
+import { fetchGameByUrl } from "./opgg";
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as any),
@@ -16,6 +17,7 @@ admin.initializeApp({
 
 export const firestore = getFirestore();
 const accountDoc = firestore.collection("streamers").doc("accounts");
+const featuredDoc = firestore.collection("games").doc("featured");
 
 const clientId = "ju8eq7rs6l90rcnvk0lexadm96gghu"; //"ix0r0umc25icbhym8uf2j2j1d6kiww";
 const clientSecret = "0tmpbpddq0id3wyx9pxvh6502y0d4k"; // "yowu9eveae5xt5oeias2iu9furoksf";
@@ -285,13 +287,53 @@ const parseNightbot = async (channel: string) => {
   return page;
 }; */
 
+export const featured = async (streams) => {
+  const promise = new Promise(async (resolve) => {
+    const games: any[] = [];
+    const queue = new Queue({ concurrent: 10, interval: 500 });
+
+    const knownStreamers = (await accountDoc.get()).data();
+    if (!knownStreamers) {
+      return;
+    }
+    console.log(streams.length);
+    let knownCount = 0;
+    for (const stream of streams) {
+      const knownStream = knownStreamers[stream.user_login];
+      if (knownStream) {
+        knownCount++;
+        console.log(stream.user_login);
+        for (const account of knownStream.accounts) {
+          queue.enqueue(async () => {
+            const game = await fetchGameByUrl(account, stream.user_login);
+            if (game) {
+              games.push(game);
+              if (games.length >= 10) {
+                queue.stop();
+              }
+            }
+          });
+        }
+      }
+    }
+
+    queue.on("stop", () => {
+      featuredDoc.set({ games });
+      resolve(games);
+    });
+  });
+  await promise;
+};
+
 const main = async () => {
   // await initPage();
   //await getToken();
   // await refreshTokens();
   await getAPIToken();
+  const streams = await getStreams();
 
-  findInfo(await getStreams());
+  findInfo(streams);
+  featured(streams);
 
   /*   new CronJob(
     "0 0 * * * *",
