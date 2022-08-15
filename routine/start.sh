@@ -1,3 +1,3 @@
 #!/bin/bash
-yarn
+cd "$(dirname "$0")"
 yarn twitch
