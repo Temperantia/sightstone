@@ -7,6 +7,39 @@ const app = initializeApp();
 const db = app.firestore();
 
 const summonerIdRegex = /"summoner_id":"[a-zA-Z0-9_-]*"/g;
+const regionRegex = new RegExp(/(?<=https:\/\/)(.*?)(?=.op.gg)/g);
+
+const findStream = (name: string, region: string, streamers: any) => {
+  const entries: any = Object.entries(streamers);
+  for (const [stream, { accounts }] of entries) {
+    if (!accounts) {
+      continue;
+    }
+    for (let account of accounts) {
+      try {
+        account = decodeURI(account);
+      } catch {
+        continue;
+      }
+      let accountName = account.substring(account.lastIndexOf("/") + 1);
+      accountName = accountName.substring(accountName.lastIndexOf("=") + 1);
+      const match = account.match(regionRegex);
+      if (!match) {
+        continue;
+      }
+      let accountRegion = match[0];
+      if (accountRegion === "www") {
+        accountRegion = "kr";
+      }
+      if (
+        accountName.toLocaleLowerCase() === name.toLocaleLowerCase() &&
+        accountRegion === region
+      ) {
+        return stream;
+      }
+    }
+  }
+};
 
 const fetchGame = async ({
   name,
@@ -17,21 +50,41 @@ const fetchGame = async ({
 }) => {
   let url: string = `https://www.op.gg/summoners/${region}/${encodeURI(name)}`;
   let result = await axios.get(url);
-  console.log(result.data.length);
   if (!result.data) {
-    return;
+    return null;
   }
   const match = result.data.match(summonerIdRegex);
   if (isEmpty(match)) {
-    return;
+    return null;
   }
   const id = JSON.parse("{" + match[0] + "}").summoner_id;
-  console.log(id);
 
-  url = `https://op.gg/api/spectates/${id}?region=${region}`;
-  result = await axios.get(url);
-  console.log(result);
-  return result.data.data;
+  try {
+    url = `https://op.gg/api/spectates/${id}?region=${region}`;
+    result = await axios.get(url);
+    console.log(result);
+  } catch {
+    return null;
+  }
+
+  const streamers = (
+    await db.collection("streamers").doc("accounts").get()
+  ).data();
+  if (!streamers) {
+    return null;
+  }
+
+  const data = result.data.data;
+
+  data.participants = data.participants.map((participant: any) => {
+    const stream = findStream(participant.summoner.name, region, streamers);
+    if (stream) {
+      return { ...participant, stream };
+    }
+    return participant;
+  });
+
+  return data;
 };
 
 export const game = https.onCall((data) => {

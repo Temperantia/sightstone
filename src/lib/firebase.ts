@@ -26,4 +26,4 @@ if (process.env.NODE_ENV !== "production") {
 
 export const featuredDoc = doc(collection(firestore, "games"), "featured");
 export const streamerNumber = httpsCallable(functions, "streamerNumber");
-export const game = httpsCallable(functions, "game");
+export const game: any = httpsCallable(functions, "game");
