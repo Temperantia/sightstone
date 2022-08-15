@@ -1,7 +1,7 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /games/* {
-      allow read: if true;
+    match /games/featured {
+      allow read;
     }
   }
 }

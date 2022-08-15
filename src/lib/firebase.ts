@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { collection, doc, getFirestore } from "firebase/firestore";
 import {
   connectFunctionsEmulator,
   getFunctions,
@@ -16,12 +17,13 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
+const firestore = getFirestore();
 const functions = getFunctions();
 
 if (process.env.NODE_ENV !== "production") {
   connectFunctionsEmulator(functions, "localhost", 5001);
 }
 
+export const featuredDoc = doc(collection(firestore, "games"), "featured");
 export const streamerNumber = httpsCallable(functions, "streamerNumber");
-export const featured = httpsCallable(functions, "featured");
 export const game = httpsCallable(functions, "game");

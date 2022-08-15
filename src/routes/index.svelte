@@ -2,9 +2,10 @@
   import { regionStore, searchStore, accountsStore } from "$lib/stores";
   import Player from "$lib/components/Player.svelte";
   import { positions } from "$lib/game";
-  import _ from "lodash";
-  import { game, streamerNumber, featured } from "$lib/firebase";
+  import _, { slice } from "lodash";
+  import { game, streamerNumber, featuredDoc } from "$lib/firebase";
   import FeaturedGame from "$lib/components/FeaturedGame.svelte";
+  import { getDoc } from "firebase/firestore";
 
   const playersMock = {
     "27750808": {
@@ -268,11 +269,11 @@
 
   <div class="my-10">
     <div class="text-3xl font-bold">Featured Games</div>
-    {#await featured()}
+    {#await getDoc(featuredDoc)}
       Loading ...
-    {:then { data }}
+    {:then snap}
       <div class="flex space-x-5">
-        {#each data as game}
+        {#each snap.data().games.slice(0, 3) as game}
           <FeaturedGame {game} />
         {/each}
       </div>
