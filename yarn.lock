@@ -688,20 +688,6 @@
     esbuild "^0.14.42"
     worktop "0.8.0-next.14"
 
-"@sveltejs/adapter-node@next":
-  version "1.0.0-next.76"
-  resolved "https://registry.npmjs.org/@sveltejs/adapter-node/-/adapter-node-1.0.0-next.76.tgz"
-  integrity sha512-SpzjYCLwCNMI7GscsaJMX5i9nOp+OoGzUCPSBs9gln9ffjO/ICLNpyea9Yfp0CkHRfufrMzMYa3wt2lqm4o9kA==
-  dependencies:
-    tiny-glob "^0.2.9"
-
-"@sveltejs/adapter-static@next":
-  version "1.0.0-next.32"
-  resolved "https://registry.npmjs.org/@sveltejs/adapter-static/-/adapter-static-1.0.0-next.32.tgz"
-  integrity sha512-kpYlghqxVWbrIdbzoiQTe1kSq9/+xlAkcd8eXTAGGPCBPYTUa0bkxt1NEfoNC+h7a+KlFoLMTi9W0AxnrNuiIQ==
-  dependencies:
-    tiny-glob "^0.2.9"
-
 "@sveltejs/kit@next":
   version "1.0.0-next.345"
   resolved "https://registry.npmjs.org/@sveltejs/kit/-/kit-1.0.0-next.345.tgz"
@@ -2543,16 +2529,6 @@ globalthis@^1.0.1:
   dependencies:
     define-properties "^1.1.3"
 
-globalyzer@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/globalyzer/-/globalyzer-0.1.0.tgz"
-  integrity sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==
-
-globrex@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/globrex/-/globrex-0.1.2.tgz"
-  integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
-
 google-auth-library@^7.14.0, google-auth-library@^7.14.1:
   version "7.14.1"
   resolved "https://registry.npmjs.org/google-auth-library/-/google-auth-library-7.14.1.tgz"
@@ -4220,14 +4196,6 @@ time-zone@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/time-zone/-/time-zone-1.0.0.tgz"
   integrity sha1-mcW/VZWJZq9tBtg73zgA3IL67F0=
-
-tiny-glob@^0.2.9:
-  version "0.2.9"
-  resolved "https://registry.npmjs.org/tiny-glob/-/tiny-glob-0.2.9.tgz"
-  integrity sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==
-  dependencies:
-    globalyzer "0.1.0"
-    globrex "^0.1.2"
 
 tmi.js@^1.8.5:
   version "1.8.5"

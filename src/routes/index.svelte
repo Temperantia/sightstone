@@ -216,7 +216,7 @@
 
 <div class="px-20 pt-5 pb-20">
   <div class="flex flex-col items-center py-3 space-y-1">
-    <div class="text-5xl" style="font-family: Righteous">👩🏼‍🎤 Stream Sniper</div>
+    <div class="text-5xl" style="font-family: Righteous">👩🏼‍🎤 The Sightstone</div>
     <div class="text-xs font-bold text-red">
       This version does not work at 100% yet!
     </div>
