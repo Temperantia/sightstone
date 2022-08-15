@@ -20,6 +20,7 @@
       {#each teams[0] as participant}
         <div class="flex items-center justify-end">
           <a
+            target="_blank"
             href={"https://twitch.tv/" + participant.stream}
             class="text-sm"
             class:text-purple={participant.stream}
@@ -49,6 +50,7 @@
             alt="osef"
           />
           <a
+            target="_blank"
             href={"https://twitch.tv/" + participant.stream}
             class="text-sm"
             class:text-purple={participant.stream}
