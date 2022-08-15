@@ -1,3 +1,7 @@
+<script context="module">
+  export const prerender = false;
+</script>
+
 <script lang="ts">
   import { page } from "$app/stores";
   import FeaturedGame from "$lib/components/FeaturedGame.svelte";
