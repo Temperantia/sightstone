@@ -51,15 +51,28 @@
       Buy us a coffee!
     </div>
     <div class="text-lg" style="font-family: Montserrat">
-      Help us maintain this project!
+      Help us maintain this project! Join us on Discord <a
+        class="text-primary"
+        target="_blank"
+        href="https://discord.gg/zpvE7gW5ST"
+      >
+        https://discord.gg/zpvE7gW5ST
+      </a>
     </div>
     <div class="text-lg" style="font-family: Montserrat">
-      Contact us at <a
+      Donations & inquiries at <a
         class="text-primary"
         href="mailto: hello.limitlessleagueteam@gmail.com"
-        >hello.limitlessleagueteam@gmail.com</a
       >
+        hello.limitlessleagueteam@gmail.com
+      </a>
     </div>
+    <a
+      class="text-2xl font-bold underline"
+      target="_blank"
+      href="https://airtable.com/shr85ZwSG1wXS7EDE"
+      >Give us a feedback to improve The Sightstone</a
+    >
   </div>
 </div>
 <div class="px-10 py-16 text-lg text-white bg-black">
