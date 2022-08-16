@@ -47,9 +47,14 @@
   <slot />
 
   <div class="py-8 text-white rounded px-13 bg-blue">
-    <div class="text-2xl font-bold" style="font-family: Montserrat">
+    <a
+      target="_blank"
+      href="https://www.buymeacoffee.com/limitlessteam"
+      class="text-2xl font-bold"
+      style="font-family: Montserrat"
+    >
       Buy us a coffee!
-    </div>
+    </a>
     <div class="text-lg" style="font-family: Montserrat">
       Help us maintain this project! Join us on Discord <a
         class="text-primary"
