@@ -6,6 +6,7 @@ import {
   httpsCallable,
 } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
+import { browser } from "$app/env";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBm7vh-MiDZjtkGWR8u-FyejesjwG4It5M",
@@ -18,7 +19,11 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
-export const analytics = getAnalytics();
+
+if (browser) {
+  getAnalytics();
+}
+
 const firestore = getFirestore();
 const functions = getFunctions();
 
