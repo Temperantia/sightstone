@@ -20,8 +20,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
+export let analytics;
 if (browser) {
-  getAnalytics();
+  analytics = getAnalytics();
 }
 
 const firestore = getFirestore();
