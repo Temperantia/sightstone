@@ -6,7 +6,7 @@
   "main": "src/electron.cjs",
   "private": true,
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "yarn && svelte-kit dev",
     "debug": "svelte-kit dev",
     "preview": "svelte-kit preview",
     "electron": "concurrently --kill-others \"svelte-kit dev\" \"electron src/electron.cjs\"",
