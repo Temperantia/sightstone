@@ -3,6 +3,7 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 import admin from "firebase-admin";
 import { analyseProfile } from "./blitz";
+import { load } from "cheerio";
 
 const app = admin.initializeApp();
 const db = app.firestore();
@@ -109,7 +110,22 @@ export const profiles = https.onCall(async ({ message }) => {
     const match = line.match(messageRegex);
     if (match) {
       const name = match[0].replace(" joined", "");
-      return { summoner: { name }, tags: await analyseProfile(name) };
+      const metaResult = await axios("https://blitz.gg/lol/tierlist");
+      const $ = load(metaResult.data);
+      const tier1 = $("title")
+        .filter(function () {
+          return $(this).text().trim() === "tier-1";
+        })
+        .parent()
+        .parent()
+        .parent();
+      const meta = tier1
+        .find('[class^="ChampionImgSimple"]')
+        .map(function () {
+          return $(this).attr("alt");
+        })
+        .toArray();
+      return { summoner: { name }, tags: await analyseProfile(name, meta) };
     }
     return null;
   });

@@ -1,5 +1,3 @@
-import axios from "axios";
-import { load } from "cheerio";
 import { request, gql } from "graphql-request";
 import _, { entries, takeWhile } from "lodash";
 
@@ -218,7 +216,7 @@ const archetypes: any = {
   ],
 };
 
-export const analyseProfile = async (name: string) => {
+export const analyseProfile = async (name: string, meta: any) => {
   const playerResult = await request(
     "https://riot.iesdev.com/graphql",
     playerQuery,
@@ -235,21 +233,7 @@ export const analyseProfile = async (name: string) => {
       accountId: playerResult.leagueProfile.accountId,
     }
   );
-  const metaResult = await axios("https://blitz.gg/lol/tierlist");
-  const $ = load(metaResult.data);
-  const tier1 = $("title")
-    .filter(function () {
-      return $(this).text().trim() === "tier-1";
-    })
-    .parent()
-    .parent()
-    .parent();
-  const meta = tier1
-    .find('[class^="ChampionImgSimple"]')
-    .map(function () {
-      return $(this).attr("alt");
-    })
-    .toArray();
+
   archetypes["Meta Slave"] = meta;
 
   const stats: any = {
