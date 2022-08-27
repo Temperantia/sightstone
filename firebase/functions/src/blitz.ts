@@ -1,3 +1,5 @@
+import axios from "axios";
+import { load } from "cheerio";
 import { request, gql } from "graphql-request";
 import _, { entries, takeWhile } from "lodash";
 
@@ -233,7 +235,22 @@ export const analyseProfile = async (name: string) => {
       accountId: playerResult.leagueProfile.accountId,
     }
   );
-  archetypes["Meta Slave"] = [];
+  const metaResult = await axios("https://blitz.gg/lol/tierlist");
+  const $ = load(metaResult.data);
+  const tier1 = $("title")
+    .filter(function () {
+      return $(this).text().trim() === "tier-1";
+    })
+    .parent()
+    .parent()
+    .parent();
+  const meta = tier1
+    .find('[class^="ChampionImgSimple"]')
+    .map(function () {
+      return $(this).attr("alt");
+    })
+    .toArray();
+  archetypes["Meta Slave"] = meta;
 
   const stats: any = {
     champions: {},
@@ -285,8 +302,6 @@ export const analyseProfile = async (name: string) => {
       ++stats.behaviour.smurf;
     }
   }
-
-  console.log(stats);
 
   const tags = [
     ...Object.entries(stats.champions)
