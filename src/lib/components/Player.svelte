@@ -13,10 +13,16 @@
   const tagVariants = {
     "Meta Slave": "bg-primary text-white",
     Tilted: "bg-red text-white",
+    Lucky: "bg-primary text-white",
     "Limit Tester": "bg-red text-white",
     Tryhard: "bg-red text-white",
     "E-girl": "bg-primary text-white",
+    Healer: "bg-primary text-white",
+    Shielder: "bg-primary text-white",
     "Tank Player": "bg-primary text-white",
+    "Invisibility Abuser": "bg-primary text-white",
+    "Lifesteal Abuser": "bg-primary text-white",
+    Smurf: "bg-primary text-white",
   };
 </script>
 
