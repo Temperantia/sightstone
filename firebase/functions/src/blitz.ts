@@ -1,5 +1,5 @@
 import { request, gql } from "graphql-request";
-import _, { entries, filter, sortBy, takeWhile } from "lodash";
+import _, { entries, takeWhile } from "lodash";
 
 const query = gql`
   query matches(

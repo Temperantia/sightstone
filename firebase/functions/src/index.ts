@@ -1,10 +1,10 @@
 import { https } from "firebase-functions";
 import axios from "axios";
 import { isEmpty } from "lodash";
-import { initializeApp } from "firebase-admin";
+import admin from "firebase-admin";
 import { analyseProfile } from "./blitz";
 
-const app = initializeApp();
+const app = admin.initializeApp();
 const db = app.firestore();
 
 const summonerIdRegex = /"summoner_id":"[a-zA-Z0-9_-]*"/g;
