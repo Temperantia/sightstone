@@ -9,6 +9,15 @@
       ({ key }) => key === championId.toString()
     )?.id;
   };
+
+  const tagVariants = {
+    "Meta Slave": "bg-primary text-white",
+    Tilted: "bg-red text-white",
+    "Limit Tester": "bg-red text-white",
+    Tryhard: "bg-red text-white",
+    "E-girl": "bg-primary text-white",
+    "Tank Player": "bg-primary text-white",
+  };
 </script>
 
 {#if right}
@@ -68,7 +77,7 @@
 {#if player.tags}
   <div>
     {#each player.tags as tag}
-      <div class="border px-2 py-1">{tag}</div>
+      <div class="border px-2 py-1 {tagVariants[tag]}">{tag}</div>
     {/each}
   </div>
 {/if}
