@@ -13,14 +13,16 @@
 
 {#if right}
   <div class="flex items-center whitespace-nowrap">
-    <img
-      class="m-2"
-      style="width: 24px; height: 24px"
-      src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-        findChampionName(player.champion_id) +
-        ".png"}
-      alt="osef"
-    />
+    {#if player.championId}
+      <img
+        class="m-2"
+        style="width: 24px; height: 24px"
+        src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
+          findChampionName(player.champion_id) +
+          ".png"}
+        alt="osef"
+      />
+    {/if}
     {#if player.stream}
       <a
         target="_blank"
@@ -51,13 +53,22 @@
       </div>
     {/if}
 
-    <img
-      class="m-2"
-      style="width: 24px; height: 24px"
-      src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-        findChampionName(player.champion_id) +
-        ".png"}
-      alt="osef"
-    />
+    {#if player.championId}
+      <img
+        class="m-2"
+        style="width: 24px; height: 24px"
+        src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
+          findChampionName(player.champion_id) +
+          ".png"}
+        alt="osef"
+      />
+    {/if}
+  </div>
+{/if}
+{#if player.tags}
+  <div>
+    {#each player.tags as tag}
+      <div class="border px-2 py-1">{tag}</div>
+    {/each}
   </div>
 {/if}

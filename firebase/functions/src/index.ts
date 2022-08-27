@@ -2,6 +2,7 @@ import { https } from "firebase-functions";
 import axios from "axios";
 import { isEmpty } from "lodash";
 import { initializeApp } from "firebase-admin";
+import { analyseProfile } from "./blitz";
 
 const app = initializeApp();
 const db = app.firestore();
@@ -99,4 +100,18 @@ export const streamerNumber = https.onCall(async () => {
     return 0;
   }
   return Object.keys(streamers).length;
+});
+
+const messageRegex = /^.* joined/g;
+
+export const profiles = https.onCall(async ({ message }) => {
+  const players = message.split("\n").map(async (line: string) => {
+    const match = line.match(messageRegex);
+    if (match) {
+      const name = match[0].replace(" joined", "");
+      return { summoner: { name }, tags: await analyseProfile(name) };
+    }
+    return null;
+  });
+  return await Promise.all(players);
 });
