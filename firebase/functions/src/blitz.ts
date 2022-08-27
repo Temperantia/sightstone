@@ -304,6 +304,9 @@ export const analyseProfile = async (name: string) => {
   }
 
   const tags = [
+    ...Object.entries(stats.roles)
+      .filter(([_key, value]: any) => value >= 5)
+      .map(([key]: any) => key),
     ...Object.entries(stats.champions)
       .filter(([_key, value]: any) => value >= 5)
       .map(([key, value]: any) => {
@@ -314,9 +317,6 @@ export const analyseProfile = async (name: string) => {
         }
       }),
     ...Object.entries(stats.archetypes)
-      .filter(([_key, value]: any) => value >= 5)
-      .map(([key]: any) => key),
-    ...Object.entries(stats.roles)
       .filter(([_key, value]: any) => value >= 5)
       .map(([key]: any) => key),
   ];
