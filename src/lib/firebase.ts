@@ -1,12 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { collection, doc, getFirestore } from "firebase/firestore";
 import {
   connectFunctionsEmulator,
   getFunctions,
   httpsCallable,
 } from "firebase/functions";
-import { getAnalytics } from "firebase/analytics";
-import { browser } from "$app/env";
+import { getAnalytics, type Analytics } from "firebase/analytics";
+import { getFirelord } from "firelordjs";
+import type { Featured, Player } from "./types";
+import { browser } from "$app/environment";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBm7vh-MiDZjtkGWR8u-FyejesjwG4It5M",
@@ -20,19 +21,28 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-export let analytics;
+export let analytics: Analytics;
 if (browser) {
   analytics = getAnalytics();
 }
 
-const firestore = getFirestore();
+export const featuredDoc = getFirelord<Featured>()("games").doc("featured");
+
 const functions = getFunctions();
 
 if (process.env.NODE_ENV !== "production") {
   connectFunctionsEmulator(functions, "localhost", 5001);
 }
 
-export const featuredDoc = doc(collection(firestore, "games"), "featured");
-export const streamerNumber = httpsCallable(functions, "streamerNumber");
-export const game: any = httpsCallable(functions, "game");
-export const profiles: any = httpsCallable(functions, "profiles");
+export const streamerNumber = httpsCallable<void, number>(
+  functions,
+  "streamerNumber"
+);
+export const game = httpsCallable<
+  { name: string; region: string },
+  { participants: any[] }
+>(functions, "game");
+export const profiles = httpsCallable<{ message: string }, Player[]>(
+  functions,
+  "profiles"
+);

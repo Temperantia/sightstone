@@ -1,21 +1,12 @@
 import preprocess from "svelte-preprocess";
-import adapter from "@sveltejs/adapter-cloudflare";
-import WindiCSS from "vite-plugin-windicss";
+import adapter from "@sveltejs/adapter-auto";
 
-const dev = process.env.NODE_ENV == "development";
-
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  preprocess: preprocess(),
   kit: {
     adapter: adapter(),
-    prerender: {
-      default: true,
-    },
-
-    vite: {
-      compilerOptions: { dev },
-      plugins: [WindiCSS()],
-    },
   },
-
-  preprocess: preprocess(),
 };
+
+export default config;

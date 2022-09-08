@@ -241,6 +241,7 @@ export const analyseProfile = async (name: string, meta: any) => {
     archetypes: {},
     roles: {},
     wins: [],
+    tiltScore: 10,
     behaviour: {
       smurf: 0,
       limitTester: 0,
@@ -273,6 +274,11 @@ export const analyseProfile = async (name: string, meta: any) => {
     ++stats.roles[role];
 
     stats.wins.push(playerMatch.playerMatchStats.win);
+    if (playerMatch.playerMatchStats.win) {
+      stats.tiltScore -= 5;
+    } else {
+      stats.tiltScore += 10;
+    }
 
     if (playerMatch.playerMatchStats.deaths >= 8) {
       ++stats.behaviour.limitTester;
@@ -324,9 +330,23 @@ export const analyseProfile = async (name: string, meta: any) => {
     tags.push("Lucky");
   }
 
-  if (takeWhile(stats.wins, (win) => !win).length >= 3) {
+  const loseStreak = takeWhile(stats.wins, (win) => !win).length;
+  if (loseStreak >= 3) {
     tags.push("Tilted");
   }
+  if (loseStreak >= 4) {
+    stats.tiltScore += 100;
+  } else if (loseStreak === 3) {
+    stats.tiltScore += 80;
+  } else if (loseStreak === 2) {
+    stats.tiltScore += 20;
+  }
 
-  return tags;
+  if (stats.tiltScore > 100) {
+    stats.tiltScore = 100;
+  } else if (stats.tiltScore < 0) {
+    stats.tiltScore = 0;
+  }
+
+  return { tags, tiltScore: stats.tiltScore };
 };

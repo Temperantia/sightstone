@@ -7,10 +7,10 @@
   import FeaturedGame from "$lib/components/FeaturedGame.svelte";
   import PlayerSquare from "$lib/components/PlayerSquare.svelte";
   import { featuredDoc, game } from "$lib/firebase";
-  import { getDoc } from "firebase/firestore";
+  import { getDoc } from "firelordjs";
 
-  $: name = $page.url.searchParams.get("name");
-  $: region = $page.url.searchParams.get("region");
+  $: name = $page.url.searchParams.get("name") ?? "";
+  $: region = $page.url.searchParams.get("region") ?? "";
 </script>
 
 {#await game({ name, region })}
@@ -43,7 +43,7 @@
     Loading ...
   {:then snap}
     <div class="flex space-x-5">
-      {#each snap.data().games.slice(0, 3) as game}
+      {#each snap.data()?.games.slice(0, 3) ?? [] as game}
         <FeaturedGame {game} />
       {/each}
     </div>

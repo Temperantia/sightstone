@@ -1,8 +1,10 @@
 <script lang="ts">
+  import type { Game } from "$lib/types";
+
   import _ from "lodash";
   import Player from "./Player.svelte";
 
-  export let game: any;
+  export let game: Game;
 
   $: teams = _.values(_.groupBy(game.participants, "team_key"));
 </script>

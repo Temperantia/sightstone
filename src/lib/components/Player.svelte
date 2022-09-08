@@ -1,16 +1,12 @@
 <script lang="ts">
   import championData from "$lib/champion.json";
+  import type { Player } from "$lib/types";
+  import { findChampionName } from "$lib/game";
 
-  export let player;
+  export let player: Player;
   export let right = false;
 
-  const findChampionName = (championId: number) => {
-    return Object.values(championData.data).find(
-      ({ key }) => key === championId.toString()
-    )?.id;
-  };
-
-  const tagVariants = {
+  const tagVariants: { [tag: string]: string } = {
     "Meta Slave": "bg-primary text-white",
     Tilted: "bg-red text-white",
     Lucky: "bg-primary text-white",
@@ -33,7 +29,7 @@
         class="m-2"
         style="width: 24px; height: 24px"
         src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-          findChampionName(player.champion_id) +
+          findChampionName(player.championId) +
           ".png"}
         alt="osef"
       />
@@ -73,7 +69,7 @@
         class="m-2"
         style="width: 24px; height: 24px"
         src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-          findChampionName(player.champion_id) +
+          findChampionName(player.championId) +
           ".png"}
         alt="osef"
       />

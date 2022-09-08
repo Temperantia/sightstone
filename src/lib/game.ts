@@ -1,4 +1,5 @@
 import { riotRequest, leagueRequest } from "./requests";
+import championData from "$lib/champion.json";
 
 export const positions = {
   top: "Top",
@@ -6,6 +7,11 @@ export const positions = {
   mid: "Mid",
   adc: "Bot",
   support: "Support",
+};
+
+export const findChampionName = (championId: string) => {
+  return Object.values(championData.data).find(({ key }) => key === championId)
+    ?.id;
 };
 
 const isPosition = (position: string, positions: string[]) => {

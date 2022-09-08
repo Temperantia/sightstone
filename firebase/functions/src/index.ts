@@ -124,7 +124,7 @@ export const profiles = https.onCall(async ({ message }) => {
           return $(this).attr("alt");
         })
         .toArray(); */
-      return { summoner: { name }, tags: await analyseProfile(name, []) };
+      return { summoner: { name }, ...(await analyseProfile(name, [])) };
     }
     return null;
   });

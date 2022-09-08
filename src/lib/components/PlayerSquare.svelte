@@ -1,13 +1,8 @@
 <script lang="ts">
-  import championData from "$lib/champion.json";
+  import { findChampionName } from "$lib/game";
+  import type { Player } from "$lib/types";
 
-  export let player;
-
-  const findChampionName = (championId: number) => {
-    return Object.values(championData.data).find(
-      ({ key }) => key === championId.toString()
-    )?.id;
-  };
+  export let player: Player;
 </script>
 
 <div class="w-38">
@@ -21,7 +16,7 @@
         class="m-2 border-2 border-purple"
         style="width: 100px; height: 100px"
         src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-          findChampionName(player.champion_id) +
+          findChampionName(player.championId) +
           ".png"}
         alt="osef"
       />
@@ -33,7 +28,7 @@
         class="m-2"
         style="width: 100px; height: 100px"
         src={"http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/" +
-          findChampionName(player.champion_id) +
+          findChampionName(player.championId) +
           ".png"}
         alt="osef"
       />
