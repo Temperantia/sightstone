@@ -216,11 +216,15 @@ const archetypes: any = {
   ],
 };
 
-export const analyseProfile = async (name: string, meta: any) => {
+export const analyseProfile = async (
+  name: string,
+  region: string,
+  meta: any
+) => {
   const playerResult = await request(
     "https://riot.iesdev.com/graphql",
     playerQuery,
-    { summoner_name: name, region: "EUW1" }
+    { summoner_name: name, region }
   );
   const result = await request(
     "https://league-player.iesdev.com/graphql",
@@ -228,7 +232,7 @@ export const analyseProfile = async (name: string, meta: any) => {
     {
       maxMatchAge: 300,
       first: 20,
-      region: "EUW1",
+      region,
       queue: "RANKED_SOLO_5X5",
       accountId: playerResult.leagueProfile.accountId,
     }

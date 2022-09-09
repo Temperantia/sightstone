@@ -102,14 +102,9 @@ export const streamerNumber = https.onCall(async () => {
   return Object.keys(streamers).length;
 });
 
-const messageRegex = /^.* joined/g;
-
-export const profiles = https.onCall(async ({ message }) => {
-  const players = message.split("\n").map(async (line: string) => {
-    const match = line.match(messageRegex);
-    if (match) {
-      const name = match[0].replace(" joined", "");
-      /* const metaResult = await axios("https://blitz.gg/lol/tierlist");
+export const profiles = https.onCall(async ({ region, summoners }) => {
+  const players = summoners.map(async (name: string) => {
+    /* const metaResult = await axios("https://blitz.gg/lol/tierlist");
       const $ = load(metaResult.data);
       const tier1 = $("title")
         .filter(function () {
@@ -124,9 +119,7 @@ export const profiles = https.onCall(async ({ message }) => {
           return $(this).attr("alt");
         })
         .toArray(); */
-      return { summoner: { name }, ...(await analyseProfile(name, [])) };
-    }
-    return null;
+    return { summoner: { name }, ...(await analyseProfile(name, region, [])) };
   });
   return await Promise.all(players);
 });

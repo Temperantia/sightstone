@@ -42,7 +42,7 @@ export const game = httpsCallable<
   { name: string; region: string },
   { participants: any[] }
 >(functions, "game");
-export const profiles = httpsCallable<{ message: string }, Player[]>(
-  functions,
-  "profiles"
-);
+export const profiles = httpsCallable<
+  { region: string; summoners: string[] },
+  Player[]
+>(functions, "profiles");
