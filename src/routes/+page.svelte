@@ -14,6 +14,7 @@
   let message = "";
   let players: Player[] | null = null;
   let region = "EUW1";
+  let loading = false;
 
   const search = async () => {
     const summoners = message.split("\n").map((line) => {
@@ -31,8 +32,12 @@
     const region = page.url.searchParams.get("region");
     const summoners = page.url.searchParams.get("summoners")?.split(",");
     if (region && summoners) {
-      const { data } = await profiles({ region, summoners });
-      players = data;
+      loading = true;
+      try {
+        const { data } = await profiles({ region, summoners });
+        loading = false;
+        players = data;
+      } catch {}
     } else {
       players = null;
     }
@@ -55,7 +60,7 @@
           <PlayerCard {player} />
         {/each}
       </div>
-    {:else}
+    {:else if !loading}
       <div class="mb-20 text-4xl text-center">
         Find out if you should <span class="text-secondary">DODGE</span> your League
         Of Legends Game
