@@ -35,9 +35,9 @@
       loading = true;
       try {
         const { data } = await profiles({ region, summoners });
-        loading = false;
         players = data;
       } catch {}
+      loading = false;
     } else {
       players = null;
     }
