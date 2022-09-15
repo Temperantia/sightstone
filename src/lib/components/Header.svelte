@@ -8,7 +8,9 @@
 </script>
 
 <nav class="flex items-center space-x-10">
-  <img src="/logo.svg" alt="logo" />
+  <a href="/">
+    <img src="/logo.svg" alt="logo" />
+  </a>
   {#each items as item}
     <a href={item.href} class="flex flex-col justify-center h-full">
       <div class="text-2xl">{item.label}</div>
