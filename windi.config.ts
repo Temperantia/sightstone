@@ -17,6 +17,7 @@ const config: WindiCssOptions = {
       success: "#15CF74",
       link: "#00A0FF",
       lightgray: "#E6E6E6",
+      gold: "#9a7333",
       gray: "#666",
       darkgray: "#181818",
       light: "white",

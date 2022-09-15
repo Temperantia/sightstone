@@ -53,7 +53,9 @@
   <div
     class="container absolute left-0 right-0 flex flex-col items-center py-10 mx-auto"
   >
-    {#if players}
+    {#if loading}
+      <div class="text-gold text-4xl">LOADING</div>
+    {:else if players}
       <div class="text-5xl mb-20">👀 Team Analysis</div>
       <div class="flex items-center space-x-3">
         {#each players as player}
