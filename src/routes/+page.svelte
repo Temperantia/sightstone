@@ -59,7 +59,7 @@
       <div class="text-5xl mb-20">👀 Team Analysis</div>
       <div class="flex items-center space-x-3">
         {#each players as player}
-          <PlayerCard {player} />
+          <PlayerCard {player} {region} />
         {/each}
       </div>
     {:else if !loading}

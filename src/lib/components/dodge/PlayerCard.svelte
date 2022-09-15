@@ -2,6 +2,13 @@
   import type { Player } from "$lib/types";
 
   export let player: Player;
+  export let region: string;
+
+  const opggRegions: { [region: string]: string } = {
+    EUW1: "euw.",
+    NA: "na.",
+    KR: "",
+  };
 
   const tagVariants: { [tag: string]: string } = {
     "Meta Slave": "bg-success text-dark",
@@ -32,9 +39,14 @@
   class="flex flex-col items-center justify-between p-3 bg-light w-63 h-80 rounded-xl"
 >
   <div class="flex flex-col items-center w-full space-y-5">
-    <div class="text-lg text-darkgray font-inter">
+    <a
+      class="text-lg text-darkgray font-inter"
+      href="https://{opggRegions[region]}op.gg/summoner/userName={player
+        .summoner.name}"
+      target="_blank"
+    >
       {player.summoner.name}
-    </div>
+    </a>
     <div class="flex flex-row flex-wrap justify-center space-x-1">
       {#each player.tags as tag}
         <div
