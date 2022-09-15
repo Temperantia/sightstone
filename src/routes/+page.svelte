@@ -63,16 +63,13 @@
         {/each}
       </div>
     {:else if !loading}
-      <div class="mb-20 text-4xl text-center">
-        Find out if you should <span class="text-secondary">DODGE</span> your League
-        Of Legends Game
-      </div>
-      <div class="text-3xl text-center">
-        Search multiple Summoner names or paste your game lobby.
+      <div class="mb-20 text-4xl text-center">Everything you need to know.</div>
+      <div class="text-2xl text-center">
+        Search multiple Summoners or paste your game lobby.
       </div>
       <div>
         <textarea
-          class="block p-1 mt-20 text-xl border rounded text-dark placeholder-dark/61 border-lightgray h-45 w-210 bg-tertiary/77"
+          class="block p-1 mt-10 text-xl border rounded text-dark placeholder-dark/61 border-lightgray h-45 w-210 bg-tertiary/77"
           placeholder="Tyler1 joined the lobby,
 RATIRL joined the lobby,
 TFBlade joined the lobby,
