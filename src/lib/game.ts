@@ -93,9 +93,6 @@ const streak = (gameWins) => {
 };
 
 const analysePlayer = async ({ name, assignedPosition }: any) => {
-  /*   if (name === "Milk Cheikh" || name === "Chaotic Blade" || name === "jjimdak abuser") {
-    return;
-  } */
   const player = await riotRequest(
     "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" +
       encodeURI(name)

@@ -5,10 +5,10 @@
 
   const tagVariants: { [tag: string]: string } = {
     "Meta Slave": "bg-success text-dark",
-    Tilted: "bg-red text-dark",
+    Tilted: "bg-danger text-dark",
     Lucky: "bg-success text-dark",
-    "Limit Tester": "bg-red text-dark",
-    Tryhard: "bg-red text-dark",
+    "Limit Tester": "bg-danger text-dark",
+    Tryhard: "bg-danger text-dark",
     "E-girl": "bg-success text-dark",
     Healer: "bg-success text-dark",
     Shielder: "bg-success text-dark",
