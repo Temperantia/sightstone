@@ -54,11 +54,11 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-between p-3 bg-light w-63 h-80 rounded-xl"
+  class="flex flex-col items-center justify-between p-3 bg-background w-63 h-80 rounded-xl text-light"
 >
   <div class="flex flex-col items-center w-full space-y-2">
     <a
-      class="text-lg text-darkgray font-inter"
+      class="text-lg font-inter"
       href="https://{opggRegions[region]}op.gg/summoner/userName={player
         .summoner.name}"
       target="_blank"
@@ -83,14 +83,14 @@
     <div class="flex flex-row flex-wrap justify-center space-x-1">
       {#each player.tags as tag}
         <div
-          class="rounded-2xl group relative text-sm my-1 font-inter border text-center py-1 px-4 {tagVariants[
+          class="rounded-2xl group relative text-dark text-sm my-1 font-inter border text-center py-1 px-4 {tagVariants[
             tag
-          ] ?? 'bg-warning text-dark'}"
+          ] ?? 'bg-warning'}"
         >
           {tag}
           {#if tagInfo[tag]}
             <span
-              class="absolute top-0 hidden px-2 py-1 text-sm text-center rounded-lg z-5 group-hover:flex bg-light -left-5 text-dark"
+              class="absolute top-0 hidden px-2 py-1 text-sm text-center rounded-lg z-5 group-hover:flex bg-light -left-5"
             >
               {tagInfo[tag]}
             </span>
@@ -102,7 +102,7 @@
 
   <div class="w-full">
     <div class="flex items-center">
-      <div class="text-gray font-inter">Tilt Score</div>
+      <div class="font-inter">Tilt Score</div>
       <div
         class="relative text-sm font-medium text-center rounded-lg group text-dark"
       >
@@ -125,7 +125,7 @@
         style="width: {player.tiltScore}%"
       />
     </div>
-    <div class="self-start text-sm text-gray font-inter">
+    <div class="self-start text-sm font-inter">
       {player.tiltScore}/100
     </div>
   </div>

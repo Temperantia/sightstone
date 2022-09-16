@@ -70,28 +70,30 @@
       <div>
         <textarea
           class="block p-1 mt-10 text-xl border rounded text-dark placeholder-dark/61 border-lightgray h-45 w-210 bg-tertiary/77"
-          placeholder="Tyler1 joined the lobby,
-RATIRL joined the lobby,
-TFBlade joined the lobby,
-Faker joined the lobby,
+          placeholder="Tyler1 joined the lobby
+RATIRL joined the lobby
+TFBlade joined the lobby
+Faker joined the lobby
 Chap_GG joined the lobby"
           bind:value={message}
         />
         <div class="flex items-center">
           <select
-            class="px-5 rounded bg-light text-dark font-inter w-34 h-18"
+            class="px-5 rounded bg-button text-light font-inter w-34 h-18"
             bind:value={region}
           >
             <option value="EUW1">EUW</option>
             <option value="KR">KR</option>
             <option value="NA">NA</option>
           </select>
-          <button
-            class="flex items-center justify-center border rounded w-18 h-18 border-light bg-button"
-            on:click={search}
-          >
-            <img src="/search.svg" alt="search" />
-          </button>
+          {#if message}
+            <button
+              class="flex items-center justify-center border rounded w-18 h-18 border-light bg-button"
+              on:click={search}
+            >
+              <img src="/search.svg" alt="search" />
+            </button>
+          {/if}
         </div>
       </div>
     {/if}
