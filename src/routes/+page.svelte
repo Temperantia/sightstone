@@ -49,14 +49,14 @@
     class="absolute w-full h-full"
     style="background-image: url(/toxic.jpeg); background-repeat: no-repeat; background-size: cover;"
   />
-  <div class="absolute w-full h-full bg-primary opacity-60" />
+  <div class="absolute w-full h-full bg-primary opacity-80" />
   <div
     class="container absolute left-0 right-0 flex flex-col items-center py-10 mx-auto"
   >
     {#if loading}
-      <div class="text-gold text-4xl">LOADING</div>
+      <div class="text-4xl text-gold">LOADING</div>
     {:else if players}
-      <div class="text-5xl mb-20">👀 Team Analysis</div>
+      <div class="mb-20 text-5xl">👀 Team Analysis</div>
       <div class="flex items-center space-x-3">
         {#each players as player}
           <PlayerCard {player} {region} />
