@@ -3,6 +3,8 @@ import type { MetaTypeCreator } from "firelordjs";
 export type Player = {
   summoner: { name: string };
   tags: string[];
+  roles: string[];
+  champions: { [name: string]: number };
   tiltScore: number;
   championId?: string;
   position?: string;

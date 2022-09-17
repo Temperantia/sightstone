@@ -1,5 +1,6 @@
 import { request, gql } from "graphql-request";
-import _, { entries, takeWhile } from "lodash";
+import { entries, takeWhile } from "lodash";
+import { archetypes } from "./constants";
 
 const query = gql`
   query matches(
@@ -136,86 +137,6 @@ const playerQuery = gql`
   }
 `;
 
-const famousOTP: any = {
-  Vayne: "Gosu",
-  Riven: "Boxbox",
-  Twitch: "RatIRL",
-  Sion: "Thebausffs",
-  Annie: "Annie OTP",
-  Udyr: "Trick2g",
-  "Master Yi": "Cowsep",
-  Draven: "Tyler1",
-  Vladimir: "Elite500",
-  Singed: "Singed420",
-};
-
-const archetypes: any = {
-  "E-girl": [
-    "Lulu",
-    "Nami",
-    "Janna",
-    "Yuumi",
-    "Soraka",
-    "Sona",
-    "Lux",
-    "Karma",
-  ],
-  Healer: [],
-  Shielder: ["Janna", "Lulu", "Karma"],
-  "Tank Player": [
-    "Ornn",
-    "Shen",
-    "Malphite",
-    "Sejuani",
-    "Rammus",
-    "Maokai",
-    "Chogath",
-    "Udyr",
-    "Zac",
-    "Volibear",
-    "Amumu",
-    "DrMundo",
-  ],
-  Tryhard: [
-    "Vayne",
-    "Katarina",
-    "Yasuo",
-    "Yone",
-    "Irelia",
-    "Azir",
-    "Riven",
-    "Lee Sin",
-    "Fiora",
-    "Fizz",
-    "Aphelios",
-    "Kalista",
-    "Ryze",
-    "Qiyana",
-    "Jayce",
-    "Sylas",
-    "Cassiopeia",
-    "Draven",
-    "Viego",
-    "Kayle",
-    "Rengar",
-    "Zed",
-    "Samira",
-    "Master Yi",
-    "Kassadin",
-  ],
-  "Invisibility Abuser": ["Evelynn", "Twitch", "Khazix", "Akshan"],
-  "Lifesteal Abuser": [
-    "Aatrox",
-    "Kayn",
-    "Vladimir",
-    "Darius",
-    "Kled",
-    "Olaf",
-    "Warwick",
-    "Swain",
-  ],
-};
-
 export const analyseProfile = async (
   name: string,
   region: string,
@@ -297,23 +218,13 @@ export const analyseProfile = async (
     }
   }
 
-  const tags = [
-    ...Object.entries(stats.roles)
-      .filter(([_key, value]: any) => value >= 5)
-      .map(([key]: any) => key),
-    ...Object.entries(stats.champions)
-      .filter(([_key, value]: any) => value >= 5)
-      .map(([key, value]: any) => {
-        if (value >= 10) {
-          return famousOTP[key] ?? key + " OTP";
-        } else if (value >= 5) {
-          return key + " Main";
-        }
-      }),
-    ...Object.entries(stats.archetypes)
-      .filter(([_key, value]: any) => value >= 5)
-      .map(([key]: any) => key),
-  ];
+  const roles = Object.entries(stats.roles)
+    .filter(([_key, value]: any) => value >= 5)
+    .map(([key]: any) => key);
+
+  const tags = Object.entries(stats.archetypes)
+    .filter(([_key, value]: any) => value >= 5)
+    .map(([key]: any) => key);
 
   if (
     Object.values(stats.champions).filter((value: any) => value > 2).length ===
@@ -352,5 +263,10 @@ export const analyseProfile = async (
     stats.tiltScore = 0;
   }
 
-  return { tags, tiltScore: stats.tiltScore };
+  return {
+    roles,
+    tags,
+    tiltScore: stats.tiltScore,
+    champions: stats.champions,
+  };
 };

@@ -9,6 +9,41 @@ export const positions = {
   support: "Support",
 };
 
+export const famousOTP: { [name: string]: string } = {
+  Aatrox: "",
+  Ahri: "Vertigal",
+  Akali: "Care4Dash",
+  Akhshan: "Chenchen53",
+  Alistar: "Alicopter",
+  Amumu: "",
+  Anivia: "Froggen",
+  Annie: "Annie Bot",
+  Aphelios: "Remmacs",
+  Ashe: "",
+  AurelionSol: "Vchee",
+  Azir: "Witness",
+  Bard: "Lathyrus",
+  Cassiopeia: "Chovy",
+  Draven: "Tyler1",
+  Evelynn: "Besteveusa",
+  Katarina: "Evolved",
+  Heimerdinger: "Hjarnan",
+  Kindred: "Pyosik",
+  Irelia: "Wickd",
+  Leblanc: "Faker",
+  Lucian: "lltrigger",
+  MasterYi: "Cowsep",
+  Nunu: "Kesha",
+  Riven: "Boxbox",
+  Sion: "Thebausffs",
+  Singed: "Singed420",
+  TwistedFate: "Dopa",
+  Twitch: "RatIRL",
+  Udyr: "Trick2g",
+  Vayne: "Gosu",
+  Vladimir: "Elite500",
+};
+
 export const findChampionName = (championId: string) => {
   return Object.values(championData.data).find(({ key }) => key === championId)
     ?.id;
@@ -112,7 +147,7 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
   const gameWins = [];
   const gamePositions = [];
   const kdas = [];
-  const champions = {};
+  const champions: any = {};
   for (const matchId of matchIds) {
     const game = await riotRequest(
       `https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}`
@@ -162,7 +197,7 @@ const fetchPlayers = async () => {
   return champSelectConv;
 };
 
-const countPoints = (player) => {
+const countPoints = (player: any) => {
   let points = 0;
 
   return points;

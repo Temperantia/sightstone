@@ -1,6 +1,5 @@
 import axios from "axios";
 import { get } from "svelte/store";
-import { argStore, keyStore } from "./stores";
 
 const apiKey = "RGAPI-864c6953-b0ff-4536-9ea7-a6e1f02ce004";
 
