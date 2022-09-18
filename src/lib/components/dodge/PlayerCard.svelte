@@ -55,7 +55,7 @@
 </script>
 
 <div
-  class="relative flex flex-col items-center justify-between p-3 bg-background w-63 h-80 rounded-xl text-light"
+  class="relative flex flex-col items-center justify-between p-3 bg-background w-63 h-96 rounded-xl text-light"
 >
   <div class="flex flex-col items-center w-full space-y-2">
     <a
@@ -92,9 +92,9 @@
         />
       {/each}
     </div>
-    <div class="flex flex-wrap items-center space-x-2">
+    <div class="flex flex-wrap items-center">
       {#each _.entries(player.champions).filter(([_, value]) => value >= 5) as [name, value]}
-        <div class="flex items-center pr-1 space-x-1 border rounded">
+        <div class="flex items-center pr-1 mb-2 mr-2 space-x-1 border rounded">
           <img
             src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{name}.png"
             alt={name}
@@ -103,13 +103,16 @@
           <div>
             {value >= 10
               ? famousOTP[name]
-                ? famousOTP[name] + "WANNABE"
+                ? famousOTP[name] + " WANNABE"
                 : "OTP"
               : "MAIN"}
           </div>
         </div>
       {/each}
     </div>
+  </div>
+
+  <div class="w-full h-32">
     <div class="flex flex-wrap justify-center space-x-1">
       {#each player.tags as tag}
         <div
@@ -128,9 +131,6 @@
         </div>
       {/each}
     </div>
-  </div>
-
-  <div class="w-full">
     <div class="flex items-center space-x-2">
       <div>Tilt Score</div>
       <div
@@ -158,5 +158,8 @@
     <div class="self-start text-sm font-inter">
       {player.tiltScore}/100
     </div>
+    {#if player.tiltScore === 100}
+      <div>This player might run down</div>
+    {/if}
   </div>
 </div>

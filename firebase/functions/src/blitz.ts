@@ -171,6 +171,7 @@ export const analyseProfile = async (
       smurf: 0,
       limitTester: 0,
     },
+    players: [],
   };
 
   for (const match of result.matches) {
