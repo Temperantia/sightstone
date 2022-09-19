@@ -112,7 +112,7 @@
     </div>
   </div>
 
-  <div class="w-full h-32 flex flex-col justify-end">
+  <div class="w-full flex flex-col justify-end">
     <div class="flex flex-wrap justify-center space-x-1 min-h-8 my-2">
       {#each player.tags as tag}
         <div
@@ -158,7 +158,7 @@
     <div class="self-start text-sm font-inter">
       {player.tiltScore}/100
     </div>
-    <div class="h-12">
+    <div class="h-8">
       {#if player.tiltScore === 100}
         This player might run down
       {/if}
