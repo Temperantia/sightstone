@@ -15,6 +15,7 @@ const config: WindiCssOptions = {
       danger: "#FF3A44",
       warning: "#FFBD00",
       success: "#15CF74",
+      deeppink: "deeppink",
       link: "#00A0FF",
       lightgray: "#E6E6E6",
       gold: "#9a7333",

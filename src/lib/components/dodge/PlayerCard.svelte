@@ -10,18 +10,18 @@
   };
 
   const tagVariants: { [tag: string]: string } = {
-    "Meta Slave": "bg-success text-dark",
-    Tilted: "bg-danger text-dark",
-    Lucky: "bg-success text-dark",
-    "Limit Tester": "bg-danger text-dark",
-    Tryhard: "bg-danger text-dark",
-    "E-girl": "bg-success text-dark",
-    Healer: "bg-success text-dark",
-    Shielder: "bg-success text-dark",
-    "Tank Player": "bg-success text-dark",
-    "Invisibility Abuser": "bg-success text-dark",
-    "Lifesteal Abuser": "bg-success text-dark",
-    Smurf: "bg-success text-dark",
+    "Meta Slave": "bg-success",
+    Tilted: "bg-danger",
+    Lucky: "bg-success",
+    "Limit Tester": "bg-danger",
+    Tryhard: "bg-danger",
+    "E-girl": "bg-deeppink",
+    Healer: "bg-success",
+    Shielder: "bg-light text-dark",
+    "Tank Player": "bg-success",
+    "Invisibility Abuser": "bg-success opacity-70",
+    "Lifesteal Abuser": "bg-danger",
+    Smurf: "bg-success",
     "DEATH NOTE": "bg-dark text-light",
   };
 
@@ -97,7 +97,9 @@
 
       {#each player.roles as role}
         <img
-          src="/ranked-positions/Position_Bronze-{_.capitalize(
+          src="/ranked-positions/Position_{player.ranked.tier === 'PLATINUM'
+            ? 'Plat'
+            : _.capitalize(player.ranked.tier)}-{_.capitalize(
             role === 'ADC' ? 'BOT' : role
           )}.png"
           alt={role}
@@ -129,18 +131,18 @@
     </div>
   </div>
 
-  <div class="w-full flex flex-col justify-end">
-    <div class="flex flex-wrap justify-center space-x-1 min-h-8 my-2">
+  <div class="flex flex-col justify-end w-full">
+    <div class="flex flex-wrap justify-center my-2 space-x-1 min-h-8">
       {#each player.tags as tag}
         <div
-          class="rounded-2xl group relative text-light text-sm my-1 font-inter text-center py-1 px-4 {tagVariants[
+          class="rounded-2xl group relative text-sm my-1 text-center py-1 px-4 {tagVariants[
             tag
           ] ?? 'bg-warning'}"
         >
           {tag}
           {#if tagInfo[tag]}
             <span
-              class="absolute top-0 left-0 justify-center hidden px-2 py-1 text-sm border rounded-lg w-28 z-5 group-hover:flex bg-background "
+              class="absolute top-0 left-0 justify-center hidden px-2 py-1 text-sm border rounded-lg font-inter w-28 z-5 group-hover:flex bg-background "
             >
               {tagInfo[tag]}
             </span>
@@ -155,7 +157,7 @@
       >
         <img src="/question.png" class="w-4 h-8" alt="info" />
         <span
-          class="absolute hidden w-48 px-2 py-1 text-sm text-center rounded-lg group-hover:flex bg-light -left-15 -top-25 text-dark"
+          class="absolute hidden w-48 px-2 py-1 text-sm text-center border rounded-lg group-hover:flex bg-background -left-15 -top-25 text-light font-inter"
         >
           Point system based on the last 20 games, which analyzes the likely
           performance of the player.
