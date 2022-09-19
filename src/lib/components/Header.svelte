@@ -18,6 +18,7 @@
   >
     <img src="/discord.png" alt="discord" />
   </a>
+
   <!-- {#each items as item}
     <a href={item.href} class="flex flex-col justify-center h-full">
       <div class="text-2xl">{item.label}</div>

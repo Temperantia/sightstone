@@ -9,8 +9,8 @@
     "dev": "vite dev",
     "debug": "vite dev",
     "preview": "vite preview",
-    "electron": "concurrently --kill-others \"vite dev\" \"electron src/electron.cjs\"",
     "build": "vite build",
+    "electron": "concurrently --kill-others \"vite dev\" \"electron src/electron.cjs\"",
     "dev:package": "npm run build && electron-builder --config electron-builder.config.json --dir",
     "package": "npm run build && electron-builder --config electron-builder.config.json"
   },

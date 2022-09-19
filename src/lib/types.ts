@@ -6,6 +6,7 @@ export type Player = {
   roles: string[];
   champions: { [name: string]: number };
   tiltScore: number;
+  ranked: { rank: string; tier: string; wins: number; losses: number };
   championId?: string;
   position?: string;
   team_key?: string;

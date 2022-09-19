@@ -1,31 +1,13 @@
 <script lang="ts">
   import { famousOTP } from "$lib/game";
   import type { Player } from "$lib/types";
-  import _ from "lodash";
-
-  export let player: Player;
-  export let region: string;
-
-  let deathNote = localStorage.getItem("deathNote") ?? "";
+  import _, { capitalize } from "lodash";
 
   const opggRegions: { [region: string]: string } = {
     EUW1: "euw.",
     NA: "na.",
     KR: "",
   };
-
-  $: {
-    if (
-      deathNote.split(",").includes(player.summoner.name) &&
-      !player.tags.includes("DEATH NOTE")
-    ) {
-      player.tags.push("DEATH NOTE");
-      player.tags = player.tags;
-    } else if (!deathNote.split(",").includes(player.summoner.name)) {
-      _.remove(player.tags, (p) => p === "DEATH NOTE");
-      player.tags = player.tags;
-    }
-  }
 
   const tagVariants: { [tag: string]: string } = {
     "Meta Slave": "bg-success text-dark",
@@ -52,6 +34,28 @@
     Tilted: "Lost the last games",
     "DEATH NOTE": "You indicated this player is toxic",
   };
+
+  export let player: Player;
+  export let region: string;
+
+  let deathNote = localStorage.getItem("deathNote") ?? "";
+  $: winrate = (
+    (player.ranked.wins / (player.ranked.wins + player.ranked.losses)) *
+    100
+  ).toFixed(0);
+
+  $: {
+    if (
+      deathNote.split(",").includes(player.summoner.name) &&
+      !player.tags.includes("DEATH NOTE")
+    ) {
+      player.tags.push("DEATH NOTE");
+      player.tags = player.tags;
+    } else if (!deathNote.split(",").includes(player.summoner.name)) {
+      _.remove(player.tags, (p) => p === "DEATH NOTE");
+      player.tags = player.tags;
+    }
+  }
 </script>
 
 <div
@@ -81,7 +85,16 @@
     >
       <img src="/trash.png" alt="trash" />
     </button>
-    <div class="flex items-center">
+    <div class="flex items-center space-x-3">
+      <div class="flex items-center">
+        <img
+          class="w-8"
+          src="/ranked-emblems/Emblem_{_.capitalize(player.ranked.tier)}.png"
+          alt={player.ranked.tier}
+        />
+        <div class="text-sm">{player.ranked.rank}</div>
+      </div>
+
       {#each player.roles as role}
         <img
           src="/ranked-positions/Position_Bronze-{_.capitalize(
@@ -91,10 +104,14 @@
           class="w-8"
         />
       {/each}
+
+      <div>
+        {winrate}%
+      </div>
     </div>
     <div class="flex flex-wrap items-center">
       {#each _.entries(player.champions).filter(([_, value]) => value >= 5) as [name, value]}
-        <div class="flex items-center pr-1 mb-2 mr-2 space-x-1 border rounded">
+        <div class="flex items-center pr-1 mb-2 mr-2 space-x-2 rounded">
           <img
             src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{name}.png"
             alt={name}

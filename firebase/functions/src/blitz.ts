@@ -131,98 +131,12 @@ const playerQuery = gql`
         wins
         losses
         leaguePoints
-        insertedAt
       }
     }
   }
 `;
 
-export const analyseProfile = async (
-  name: string,
-  region: string,
-  meta: any
-) => {
-  const playerResult = await request(
-    "https://riot.iesdev.com/graphql",
-    playerQuery,
-    { summoner_name: name, region }
-  );
-  const result = await request(
-    "https://league-player.iesdev.com/graphql",
-    query,
-    {
-      maxMatchAge: 300,
-      first: 20,
-      region,
-      queue: "RANKED_SOLO_5X5",
-      accountId: playerResult.leagueProfile.accountId,
-    }
-  );
-
-  archetypes["Meta Slave"] = meta;
-
-  const stats: any = {
-    champions: {},
-    archetypes: {},
-    roles: {},
-    wins: [],
-    tiltScore: 10,
-    behaviour: {
-      smurf: 0,
-      limitTester: 0,
-    },
-    players: [],
-  };
-
-  for (const match of result.matches) {
-    const playerMatch = match.playerMatches[0];
-    const champion = playerMatch.champion.normalizedName;
-
-    if (!stats.champions[champion]) {
-      stats.champions[champion] = 0;
-    }
-    ++stats.champions[champion];
-
-    const e: any = entries(archetypes);
-    for (const [archetype, champions] of e) {
-      if (champions.includes(champion)) {
-        if (!stats.archetypes[archetype]) {
-          stats.archetypes[archetype] = 0;
-        }
-        ++stats.archetypes[archetype];
-      }
-    }
-
-    const role = playerMatch.role;
-    if (!stats.roles[role]) {
-      stats.roles[role] = 0;
-    }
-    ++stats.roles[role];
-
-    stats.wins.push(playerMatch.playerMatchStats.win);
-    if (playerMatch.playerMatchStats.win) {
-      stats.tiltScore -= 5;
-    } else {
-      stats.tiltScore += 10;
-    }
-
-    if (playerMatch.playerMatchStats.deaths >= 8) {
-      ++stats.behaviour.limitTester;
-    }
-    if (
-      (playerMatch.playerMatchStats.kills +
-        playerMatch.playerMatchStats.assists) /
-        playerMatch.playerMatchStats.deaths >=
-      5
-    ) {
-      ++stats.behaviour.smurf;
-    }
-  }
-
-  const roles = Object.entries(stats.roles)
-    .filter(([_key, value]: any) => value >= 5)
-    .map(([key]: any) => key);
-
+const getTags = (stats: any, loseStreak: number) => {
   const tags = Object.entries(stats.archetypes)
     .filter(([_key, value]: any) => value >= 5)
     .map(([key]: any) => key);
@@ -246,28 +160,134 @@ export const analyseProfile = async (
     tags.push("Lucky");
   }
 
-  const loseStreak = takeWhile(stats.wins, (win) => !win).length;
   if (loseStreak >= 3) {
     tags.push("Tilted");
   }
+  return tags;
+};
+
+const getTiltScore = (loseStreak: number) => {
+  let tiltScore = 10;
+
   if (loseStreak >= 4) {
-    stats.tiltScore += 100;
+    tiltScore += 100;
   } else if (loseStreak === 3) {
-    stats.tiltScore += 80;
+    tiltScore += 80;
   } else if (loseStreak === 2) {
-    stats.tiltScore += 20;
+    tiltScore += 20;
   }
 
-  if (stats.tiltScore > 100) {
-    stats.tiltScore = 100;
-  } else if (stats.tiltScore < 0) {
-    stats.tiltScore = 0;
+  if (tiltScore > 100) {
+    tiltScore = 100;
+  } else if (tiltScore < 0) {
+    tiltScore = 0;
   }
+
+  return tiltScore;
+};
+
+const analyseMatch = (match: any, stats: any) => {
+  const playerMatch = match.playerMatches[0];
+  const champion = playerMatch.champion.normalizedName;
+
+  if (!stats.champions[champion]) {
+    stats.champions[champion] = 0;
+  }
+  ++stats.champions[champion];
+
+  const e: any = entries(archetypes);
+  for (const [archetype, champions] of e) {
+    if (champions.includes(champion)) {
+      if (!stats.archetypes[archetype]) {
+        stats.archetypes[archetype] = 0;
+      }
+      ++stats.archetypes[archetype];
+    }
+  }
+
+  const role = playerMatch.role;
+  if (!stats.roles[role]) {
+    stats.roles[role] = 0;
+  }
+  ++stats.roles[role];
+
+  stats.wins.push(playerMatch.playerMatchStats.win);
+  if (playerMatch.playerMatchStats.win) {
+    stats.tiltScore -= 5;
+  } else {
+    stats.tiltScore += 10;
+  }
+
+  if (playerMatch.playerMatchStats.deaths >= 8) {
+    ++stats.behaviour.limitTester;
+  }
+  const kda =
+    (playerMatch.playerMatchStats.kills +
+      playerMatch.playerMatchStats.assists) /
+    playerMatch.playerMatchStats.deaths;
+  if (kda >= 5) {
+    ++stats.behaviour.smurf;
+  }
+
+  return stats;
+};
+
+export const analyseProfile = async (
+  name: string,
+  region: string,
+  meta: any
+) => {
+  const playerResult = await request(
+    "https://riot.iesdev.com/graphql",
+    playerQuery,
+    { summoner_name: name, region }
+  );
+  const result = await request(
+    "https://league-player.iesdev.com/graphql",
+    query,
+    {
+      maxMatchAge: 300,
+      first: 20,
+      region,
+      queue: "RANKED_SOLO_5X5",
+      accountId: playerResult.leagueProfile.accountId,
+    }
+  );
+  archetypes["Meta Slave"] = meta;
+
+  let stats: any = {
+    champions: {},
+    archetypes: {},
+    roles: {},
+    wins: [],
+    behaviour: {
+      smurf: 0,
+      limitTester: 0,
+    },
+    players: [],
+  };
+
+  for (const match of result.matches) {
+    stats = analyseMatch(match, stats);
+  }
+
+  const roles = Object.entries(stats.roles)
+    .filter(([_key, value]: any) => value >= 5)
+    .map(([key]: any) => key);
+  const loseStreak = takeWhile(stats.wins, (win) => !win).length;
+
+  const tags = getTags(stats, loseStreak);
+  const tiltScore = getTiltScore(loseStreak);
+
+  const ranked = playerResult.leagueProfile.latestRanks.find(
+    ({ queue }: any) => queue === "RANKED_SOLO_5X5"
+  );
 
   return {
     roles,
     tags,
-    tiltScore: stats.tiltScore,
+    tiltScore,
     champions: stats.champions,
+    ranked,
   };
 };
