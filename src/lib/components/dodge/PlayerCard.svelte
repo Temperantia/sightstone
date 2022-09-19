@@ -1,7 +1,7 @@
 <script lang="ts">
   import { famousOTP } from "$lib/game";
   import type { Player } from "$lib/types";
-  import _, { capitalize } from "lodash";
+  import _ from "lodash";
 
   const opggRegions: { [region: string]: string } = {
     EUW1: "euw.",
@@ -83,7 +83,7 @@
         localStorage.setItem("deathNote", list.join(","));
       }}
     >
-      <img src="/trash.png" alt="trash" />
+      <img src="/deathnote.jpeg" alt="trash" />
     </button>
     <div class="flex items-center space-x-3">
       <div class="flex items-center">
