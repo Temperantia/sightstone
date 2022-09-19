@@ -112,8 +112,8 @@
     </div>
   </div>
 
-  <div class="w-full h-32">
-    <div class="flex flex-wrap justify-center space-x-1">
+  <div class="w-full h-32 flex flex-col justify-end">
+    <div class="flex flex-wrap justify-center space-x-1 min-h-8 my-2">
       {#each player.tags as tag}
         <div
           class="rounded-2xl group relative text-light text-sm my-1 font-inter text-center py-1 px-4 {tagVariants[
@@ -158,8 +158,10 @@
     <div class="self-start text-sm font-inter">
       {player.tiltScore}/100
     </div>
-    {#if player.tiltScore === 100}
-      <div>This player might run down</div>
-    {/if}
+    <div class="h-12">
+      {#if player.tiltScore === 100}
+        This player might run down
+      {/if}
+    </div>
   </div>
 </div>
