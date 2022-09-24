@@ -23,13 +23,18 @@ export const famousOTP: { [name: string]: string } = {
   AurelionSol: "Vchee",
   Azir: "Witness",
   Bard: "Lathyrus",
+  Caitlyn: "Geranimo",
   Cassiopeia: "Chovy",
   Chogath: "Alex Blais",
+  Darius: "KB",
   Diana: "Kai Lunari",
   Draven: "Tyler1",
+  Ekko: "Douglas Killer",
   Evelynn: "Besteveusa",
+  Ezreal: "ACE_Ezreal",
   Fiora: "Giraffe",
   Fizz: "Mangofish",
+  Gangplank: "Solarbacca",
   Katarina: "Evolved",
   Heimerdinger: "Hjarnan",
   Kindred: "Pyosik",
@@ -43,8 +48,10 @@ export const famousOTP: { [name: string]: string } = {
   Morgana: "Luminum",
   MissFortune: "Dog2",
   Nami: "Bizzleberry",
+  Nidalee: "Tent",
   Nunu: "Kesha",
   Riven: "Boxbox",
+  Samira: "Jiferz",
   Shaco: "Pink Ward",
   Sion: "Thebausffs",
   Singed: "Singed420",
@@ -54,8 +61,14 @@ export const famousOTP: { [name: string]: string } = {
   Twitch: "RatIRL",
   Udyr: "Trick2g",
   Vayne: "Gosu",
+  Veigar: "Necroside",
+  Vex: "PekinWoof",
+  Viego: "WickjKR",
   Vladimir: "Elite500",
+  Xayah: "Pearlsayah",
+  Xerath: "zwag",
   Yasuo: "Yassuo",
+  Zed: "LL stylish",
 };
 
 export const findChampionName = (championId: string) => {
@@ -120,27 +133,6 @@ const championPerformance = (champion) => {
   }
 };
 
-const streak = (gameWins) => {
-  let winStreak = 0;
-  let loseStreak = 0;
-  for (const win of gameWins) {
-    if (win) {
-      ++winStreak;
-    } else {
-      ++loseStreak;
-    }
-    if (winStreak > 0 && loseStreak > 0) {
-      break;
-    }
-  }
-
-  return winStreak > loseStreak ? winStreak : loseStreak * -1;
-
-  console.info(
-    winStreak > loseStreak ? winStreak + "+ streak" : loseStreak + "- streak"
-  );
-};
-
 const analysePlayer = async ({ name, assignedPosition }: any) => {
   const player = await riotRequest(
     "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" +
@@ -194,14 +186,18 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
 
   const smurf = isSmurf(kdas);
   const offrole = isOffrole(assignedPosition, gamePositions);
-  const onStreak = streak(gameWins);
 
-  return { champions, smurf, offrole, onStreak };
+  return { champions, smurf, offrole };
 };
 
-const fetchPlayers = async () => {
+export const fetchPlayers = async () => {
   const convs = await leagueRequest("/lol-chat/v1/conversations");
-  const conv = convs.find(({ type }) => type === "championSelect");
+  if (!convs) {
+    return;
+  }
+  const conv = convs.find(
+    ({ type }: { type: string }) => type === "championSelect"
+  );
   if (!conv) {
     return;
   }
@@ -211,37 +207,16 @@ const fetchPlayers = async () => {
   return champSelectConv;
 };
 
-const countPoints = (player: any) => {
-  let points = 0;
-
-  return points;
-};
-
-export const analyseTeam = async (players) => {
+export const analyseTeam = async () => {
   const chat = await fetchPlayers();
   if (!chat) {
     return;
   }
-  const team = {};
+  const team: { [summonerId: string]: any } = {};
   for (const { summonerId, name } of chat) {
     if (summonerId) {
       team[summonerId] = { name };
     }
-  }
-
-  console.log(team);
-
-  for (const { summonerId, championId, assignedPosition } of players) {
-    if (summonerId) {
-      team[summonerId] = { ...team[summonerId], championId, assignedPosition };
-    }
-  }
-  const values: any = Object.entries(team);
-  for (const [id, player] of values) {
-    const analysis = await analysePlayer(player);
-    console.log("finished analysis");
-    const points = countPoints(analysis);
-    team[id] = { ...team[id], ...analysis, points };
   }
 
   console.log(team);

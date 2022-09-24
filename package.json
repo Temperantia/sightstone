@@ -9,14 +9,12 @@
     "dev": "vite dev",
     "debug": "vite dev",
     "preview": "vite preview",
-    "build": "vite build",
-    "electron": "concurrently --kill-others \"vite dev\" \"electron src/electron.cjs\"",
-    "dev:package": "npm run build && electron-builder --config electron-builder.config.json --dir",
-    "package": "npm run build && electron-builder --config electron-builder.config.json"
+    "build": "vite build"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^1.0.0-next.71",
     "@sveltejs/kit": "next",
+    "@tauri-apps/cli": "^1.1.1",
     "@types/cron": "^2.0.0",
     "@types/lodash": "^4.14.182",
     "@types/tmi.js": "^1.8.1",
@@ -32,6 +30,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@tauri-apps/api": "^1.1.0",
     "axios": "^0.27.2",
     "case": "^1.6.3",
     "cheerio": "^1.0.0-rc.11",

@@ -18,6 +18,14 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Application",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["tauri", "dev"],
+      "runtimeExecutable": "yarn",
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Browser",
       "type": "chrome",
       "request": "launch",
@@ -28,7 +36,7 @@
   "compounds": [
     {
       "name": "Start",
-      "configurations": ["Client", "Server", "Browser"],
+      "configurations": ["Client", "Server", "Application", "Browser"],
       "stopAll": true
     }
   ]
