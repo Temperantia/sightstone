@@ -1,4 +1,4 @@
-import { riotRequest, leagueRequest } from "./requests";
+import { leagueRequest } from "./requests";
 import championData from "$lib/champion.json";
 
 export const positions = {
@@ -136,7 +136,7 @@ const championPerformance = (champion) => {
   }
 };
 
-const analysePlayer = async ({ name, assignedPosition }: any) => {
+/* const analysePlayer = async ({ name, assignedPosition }: any) => {
   const player = await riotRequest(
     "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" +
       encodeURI(name)
@@ -191,24 +191,24 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
   const offrole = isOffrole(assignedPosition, gamePositions);
 
   return { champions, smurf, offrole };
-};
+}; */
 
 export const fetchPlayers = async () => {
   const convs = await leagueRequest("/lol-chat/v1/conversations");
   console.log(convs);
   if (!convs) {
-    return;
+    return {};
   }
   const conv = convs.find(
     ({ type }: { type: string }) => type === "championSelect"
   );
   if (!conv) {
-    return;
+    return {};
   }
   const champSelectConv = await leagueRequest(
     "/lol-chat/v1/conversations/" + conv.id + "/participants"
   );
-  return champSelectConv;
+  return { id: conv.id, chat: champSelectConv };
 };
 
 export const analyseTeam = async () => {

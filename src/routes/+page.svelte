@@ -3,6 +3,7 @@
   import { page } from "$app/stores";
   import PlayerCard from "$lib/components/dodge/PlayerCard.svelte";
   import { profiles } from "$lib/firebase";
+  import { playersStore } from "$lib/stores";
   import type { Player } from "$lib/types";
   import _ from "lodash";
 
@@ -32,16 +33,16 @@
       loading = true;
       try {
         const { data } = await profiles({ region, summoners });
-        players = data;
+        playersStore.set(data);
       } catch {}
       loading = false;
     } else {
-      players = null;
+      playersStore.set(null);
     }
   });
 </script>
 
-<div class="relative h-[841px]">
+<div class="relative h-screen">
   <div
     class="absolute w-full h-full"
     style="background-image: url(/toxic.jpeg); background-repeat: no-repeat; background-size: cover;"
@@ -52,16 +53,16 @@
   >
     {#if loading}
       <div class="text-4xl text-gold">LOADING</div>
-    {:else if players}
+    {:else if $playersStore}
       <div class="mb-20 text-5xl">👀 Team Analysis</div>
       <div class="flex items-center space-x-10">
-        {#each players as player}
+        {#each $playersStore as player}
           <PlayerCard {player} {region} />
         {/each}
       </div>
     {:else if !loading}
-      {#if typeof window !== "undefined" && window?.__TAURI__}
-        <div />
+      {#if typeof window !== "undefined" && window.__TAURI__}
+        <div>Waiting for a game lobby</div>
       {:else}
         <div class="mb-20 text-4xl text-center">
           Everything you need to know.
@@ -102,9 +103,7 @@ Chap_GG joined the lobby"
     {/if}
   </div>
 </div>
-{#if players}
-  <div />
-{:else}
+{#if typeof window !== "undefined" && !window.__TAURI__ && !players}
   <div
     class="relative flex items-center justify-center h-100"
     style="background-image: url(/select.jpeg); background-repeat: no-repeat; background-size: 100%; background-position: center;"

@@ -12,7 +12,12 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "http": {
+        "scope": ["https://**"],
+        "all": true,
+        "request": true
+      }
     },
     "bundle": {
       "active": true,
@@ -57,9 +62,9 @@
       {
         "fullscreen": false,
         "height": 800,
-        "resizable": true,
+        "resizable": false,
         "title": "The SightStone",
-        "width": 1300
+        "width": 1400
       }
     ]
   }
