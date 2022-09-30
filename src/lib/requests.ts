@@ -1,6 +1,5 @@
 import { get } from "svelte/store";
 import { gameServerStore } from "./stores";
-import { getClient } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api/tauri";
 
 const apiKey = "RGAPI-864c6953-b0ff-4536-9ea7-a6e1f02ce004";
