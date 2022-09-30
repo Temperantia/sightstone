@@ -10,7 +10,7 @@ export const positions = {
 };
 
 export const famousOTP: { [name: string]: string } = {
-  Aatrox: "",
+  Aatrox: "Naayil",
   Ahri: "Vertigal",
   Akali: "Care4Dash",
   Akhshan: "Chenchen53",
@@ -38,7 +38,9 @@ export const famousOTP: { [name: string]: string } = {
   Katarina: "Evolved",
   Heimerdinger: "Hjarnan",
   Kindred: "Pyosik",
+  Hecarim: "EUWRATS",
   Irelia: "Wickd",
+  Kaisa: "Kdrama",
   Kassadin: "Xpeke",
   Khazix: "Tinjus",
   Leblanc: "Faker",
@@ -53,6 +55,7 @@ export const famousOTP: { [name: string]: string } = {
   Riven: "Boxbox",
   Samira: "Jiferz",
   Shaco: "Pink Ward",
+  Shyvana: "TheFireWyrm",
   Sion: "Thebausffs",
   Singed: "Singed420",
   Sona: "Takyre",
@@ -192,6 +195,7 @@ const analysePlayer = async ({ name, assignedPosition }: any) => {
 
 export const fetchPlayers = async () => {
   const convs = await leagueRequest("/lol-chat/v1/conversations");
+  console.log(convs);
   if (!convs) {
     return;
   }

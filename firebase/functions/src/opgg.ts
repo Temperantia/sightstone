@@ -34,7 +34,7 @@ export const fetchGameByUrl = async (url: string, stream: string) => {
     });
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 };

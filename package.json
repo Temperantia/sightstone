@@ -9,7 +9,8 @@
     "dev": "vite dev",
     "debug": "vite dev",
     "preview": "vite preview",
-    "build": "vite build"
+    "build": "vite build",
+    "app": "yarn tauri dev"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^1.0.0-next.71",
