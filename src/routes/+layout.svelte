@@ -52,8 +52,6 @@
     queueLoop = setInterval(async () => {
       await getLockfileData();
 
-      console.log("found lock");
-
       const { id, chat } = await fetchPlayers();
       if (!chat) {
         return;
@@ -101,7 +99,9 @@
   };
 
   onMount(() => {
-    startQueue();
+    if (typeof window !== "undefined" && window.__TAURI__) {
+      startQueue();
+    }
   });
 
   onDestroy(() => {
