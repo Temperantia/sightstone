@@ -16,8 +16,8 @@
       href="https://drive.google.com/u/0/uc?id=19_H4evZ4gwqWsHdx0ck929pUeDv9d9tR&export=download"
       download
     >
-      TRY THE APP</a
-    >
+      TRY THE APP
+    </a>
   {/if}
   <a
     href="https://discord.gg/zpvE7gW5ST"
