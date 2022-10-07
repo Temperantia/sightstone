@@ -5,7 +5,7 @@ import {
   httpsCallable,
 } from "firebase/functions";
 import { getAnalytics, type Analytics } from "firebase/analytics";
-import { getFirelord } from "firelordjs";
+import { getFirelord, getFirestore } from "firelordjs";
 import type { Featured, Player } from "./types";
 import { browser } from "$app/environment";
 
@@ -26,7 +26,9 @@ if (browser) {
   analytics = getAnalytics();
 }
 
-export const featuredDoc = getFirelord<Featured>()("games").doc("featured");
+const db = getFirestore()
+
+export const featuredDoc = getFirelord<Featured>(db, "games").doc("featured");
 
 const functions = getFunctions();
 
