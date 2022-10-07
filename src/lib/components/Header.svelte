@@ -19,6 +19,15 @@
     <img src="/discord.png" alt="discord" />
   </a>
 
+  {#if typeof window !== "undefined" && !window.__TAURI__}
+    <a
+      href="https://drive.google.com/u/0/uc?id=19_H4evZ4gwqWsHdx0ck929pUeDv9d9tR&export=download"
+      download
+    >
+      TRY THE APP</a
+    >
+  {/if}
+
   <!-- {#each items as item}
     <a href={item.href} class="flex flex-col justify-center h-full">
       <div class="text-2xl">{item.label}</div>
