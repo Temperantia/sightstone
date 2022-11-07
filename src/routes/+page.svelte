@@ -55,7 +55,7 @@
       <div class="text-4xl text-gold">LOADING</div>
     {:else if $playersStore}
       <div class="mb-20 text-5xl">👀 Team Analysis</div>
-      <div class="flex items-center space-x-10">
+      <div class="flex items-center space-x-2">
         {#each $playersStore as player}
           <PlayerCard {player} {region} />
         {/each}

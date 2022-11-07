@@ -284,6 +284,7 @@ export const analyseProfile = async (
   );
 
   return {
+    matches: result.matches,
     roles,
     tags,
     tiltScore,

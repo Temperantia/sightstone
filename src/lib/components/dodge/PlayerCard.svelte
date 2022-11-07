@@ -1,7 +1,8 @@
 <script lang="ts">
   import { famousOTP } from "$lib/game";
+  import { stateStore } from "$lib/stores";
   import type { Player } from "$lib/types";
-  import _ from "lodash";
+  import _, { slice } from "lodash";
 
   const opggRegions: { [region: string]: string } = {
     EUW1: "euw.",
@@ -56,6 +57,8 @@
       player.tags = player.tags;
     }
   }
+
+  $: console.log(player);
 </script>
 
 <div
@@ -70,7 +73,7 @@
     >
       {player.summoner.name}
     </a>
-    <button
+    <!--  <button
       class="absolute w-6 top-1 right-5"
       on:click={() => {
         let list = deathNote.split(",").filter((player) => !!player);
@@ -84,7 +87,7 @@
       }}
     >
       <img src="/deathnote.jpeg" alt="trash" />
-    </button>
+    </button> -->
     <div class="flex items-center space-x-3">
       <div class="flex items-center">
         <img
@@ -132,6 +135,21 @@
   </div>
 
   <div class="flex flex-col justify-end w-full">
+    {#each player.matches.slice(0, 5) as match}
+      {@const stats = match.playerMatches[0]}
+      <div class="flex">
+        <img
+          src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{stats
+            .champion.normalizedName}.png"
+          alt=""
+          class="w-8"
+        />
+        <div>
+          {stats.playerMatchStats.kills}/{stats.playerMatchStats.deaths}/{stats
+            .playerMatchStats.assists}
+        </div>
+      </div>
+    {/each}
     <div class="flex flex-wrap justify-center my-2 space-x-1 min-h-8">
       {#each player.tags as tag}
         <div

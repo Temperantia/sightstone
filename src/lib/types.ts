@@ -11,6 +11,7 @@ export type Player = {
   assignedPosition?: string;
   team_key?: string;
   stream?: string;
+  matches: any[];
 };
 export type Game = { participants: Player[] };
 
